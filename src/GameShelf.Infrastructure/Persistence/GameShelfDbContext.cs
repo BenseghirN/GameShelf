@@ -17,7 +17,7 @@ public class GameShelfDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Exemple de PK composite
+        // PK composées pour les entités de jointure
         modelBuilder.Entity<GameTag>()
             .HasKey(gt => new { gt.GameId, gt.TagId });
 
