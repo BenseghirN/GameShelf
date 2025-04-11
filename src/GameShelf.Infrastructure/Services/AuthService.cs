@@ -19,15 +19,15 @@ namespace GameShelf.Infrastructure.Services
 
         public async Task<AuthResultDto> LoginAsync(LoginRequestDto dto)
         {
-            var user = await _unitOfWork.UserRepository.GetByEmailAsync(dto.Email);
-            if (user == null)
+            User? user = await _unitOfWork.UserRepository.GetByEmailAsync(dto.Email);
+            if (user is null)
                 throw new Exception("Utilisateur non trouvé.");
 
-            var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
+            PasswordVerificationResult result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
             if (result == PasswordVerificationResult.Failed)
                 throw new Exception("Mot de passe incorrect.");
 
-            var token = _jwtService.GenerateToken(user);
+            string token = _jwtService.GenerateToken(user);
 
             return new AuthResultDto
             {
@@ -42,7 +42,7 @@ namespace GameShelf.Infrastructure.Services
             if (await _unitOfWork.UserRepository.EmailExistsAsync(dto.Email))
                 throw new Exception("Email déjà utilisé.");
 
-            var user = new User
+            User user = new User
             {
                 Id = Guid.NewGuid(),
                 Email = dto.Email,
@@ -53,9 +53,9 @@ namespace GameShelf.Infrastructure.Services
 
             user.PasswordHash = _passwordHasher.HashPassword(user, dto.Password);
             await _unitOfWork.UserRepository.AddAsync(user);
-            await _unitOfWork.SaveChangesAsync(); // ✅ Appel unique ici
+            await _unitOfWork.SaveChangesAsync();
 
-            var token = _jwtService.GenerateToken(user);
+            string token = _jwtService.GenerateToken(user);
 
             return new AuthResultDto
             {
