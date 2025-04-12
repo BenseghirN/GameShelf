@@ -18,7 +18,6 @@ namespace GameShelf.API.Controllers
             _authService = authService;
         }
 
-
         /// <summary>
         /// Enregistre un nouvel utilisateur et retourne un token JWT.
         /// </summary>

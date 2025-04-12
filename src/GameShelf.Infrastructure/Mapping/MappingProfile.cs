@@ -15,6 +15,11 @@ namespace GameShelf.Infrastructure.Mapping
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Role, opt => opt.Ignore());
 
+            //Création de l'utilisateur par un admin
+            CreateMap<AdminCreateUserDto, User>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
+
             // Mapping Entity → DTO
             CreateMap<Game, GameDto>().ReverseMap();
             CreateMap<GamePlatform, GamePlatformDto>().ReverseMap();
