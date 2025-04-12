@@ -1,7 +1,8 @@
+using GameShelf.Application.Interfaces;
 using GameShelf.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-public class GameShelfDbContext : DbContext
+public class GameShelfDbContext : DbContext, IGameShelfDbContext
 {
     public GameShelfDbContext(DbContextOptions<GameShelfDbContext> options)
         : base(options) { }

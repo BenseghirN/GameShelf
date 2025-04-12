@@ -1,5 +1,6 @@
 using GameShelf.API.Configuration;
 using GameShelf.Infrastructure.Configuration;
+using GameShelf.Application.Configuration;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -10,8 +11,12 @@ builder.Services.AddApiVersioningConfiguration();
 builder.Services.AddSwaggerConfiguration(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddAuthorization();
+builder.Services.AddAuthenticationConfiguration();
+
 // Add custom services and configurations
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication(builder.Configuration);
 
 WebApplication app = builder.Build();
 

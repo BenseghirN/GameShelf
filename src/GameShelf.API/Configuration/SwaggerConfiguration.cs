@@ -26,7 +26,7 @@ namespace GameShelf.API.Configuration
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Tapez simplement : **Bearer {votre_token}**"
+                    Description = "Saisissez le token Firebase au format 'Bearer {token}'"
                 });
 
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -40,7 +40,7 @@ namespace GameShelf.API.Configuration
                                 Id = "Bearer"
                             }
                         },
-                        Array.Empty<string>()
+                         new List<string>()
                     }
                 });
             });
