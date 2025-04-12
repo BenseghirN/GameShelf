@@ -9,5 +9,6 @@ namespace GameShelf.Application.Interfaces
         Task<bool> EmailExistsAsync(string email);
         Task AddAsync(User user);
         Task<List<User>> GetAllAsync();
+        void Remove(User user);
     }
 }

@@ -38,5 +38,10 @@ namespace GameShelf.Infrastructure.Repositories
         {
             return await _context.Users.ToListAsync();
         }
+
+        public void Remove(User user)
+        {
+            _context.Users.Remove(user);
+        }
     }
 }
