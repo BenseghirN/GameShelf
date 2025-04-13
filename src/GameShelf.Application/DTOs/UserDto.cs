@@ -1,3 +1,5 @@
+using GameShelf.Domain.Enums;
+
 namespace GameShelf.Application.DTOs
 {
     public class UserDto
@@ -8,6 +10,6 @@ namespace GameShelf.Application.DTOs
         public string Pseudo { get; set; } = string.Empty;
         public string GivenName { get; set; } = string.Empty;
         public string Surname { get; set; } = string.Empty;
-        public string Role { get; set; } = "User";
+        public UserRole Role { get; set; } = UserRole.User;
     }
 }

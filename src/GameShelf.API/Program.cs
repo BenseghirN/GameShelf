@@ -16,7 +16,7 @@ builder.Services.AddAuthenticationConfiguration();
 
 // Add custom services and configurations
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddApplication(builder.Configuration);
+builder.Services.AddApplication();
 
 WebApplication app = builder.Build();
 

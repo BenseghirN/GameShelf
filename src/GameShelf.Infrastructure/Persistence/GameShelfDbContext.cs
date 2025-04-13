@@ -27,5 +27,17 @@ public class GameShelfDbContext : DbContext, IGameShelfDbContext
 
         modelBuilder.Entity<UserGame>()
             .HasKey(ug => new { ug.UserId, ug.GameId });
+
+        modelBuilder.Entity<User>()
+            .Property(u => u.Role)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<UserGame>()
+            .Property(ug => ug.Statut)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<UserProposal>()
+            .Property(p => p.Statut)
+            .HasConversion<string>();
     }
 }

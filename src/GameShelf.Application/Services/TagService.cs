@@ -1,0 +1,45 @@
+using AutoMapper;
+using GameShelf.Application.DTOs;
+using GameShelf.Application.Interfaces;
+using GameShelf.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace GameShelf.Application.Services
+{
+    public class TagService(IGameShelfDbContext dbContext, IMapper mapper) : ITagService
+    {
+        public async Task<TagDto> CreateAsync(TagDto dto, CancellationToken cancellationToken = default)
+        {
+            Tag tag = mapper.Map<Tag>(dto);
+            dbContext.Tags.Add(tag);
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return mapper.Map<TagDto>(tag);
+        }
+
+        public async Task DeleteAsync(int id, CancellationToken cancellationToken = default)
+        {
+            Tag? tag = await dbContext.Tags.FindAsync(new object[] { id }, cancellationToken);
+            if (tag == null) throw new Exception("Tag introuvable.");
+
+            dbContext.Tags.Remove(tag);
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public async Task<List<TagDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        {
+            List<Tag> tags = await dbContext.Tags.ToListAsync(cancellationToken);
+            return mapper.Map<List<TagDto>>(tags);
+        }
+
+        public async Task<TagDto> UpdateAsync(int id, TagDto dto, CancellationToken cancellationToken = default)
+        {
+            Tag? tag = await dbContext.Tags.FindAsync(new object[] { id }, cancellationToken);
+            if (tag == null) throw new Exception("Tag introuvable.");
+
+            // TODO: ADD METHOD INTO GAME ENTITY TO CREATE GAME
+            tag.Nom = dto.Nom;
+            await dbContext.SaveChangesAsync(cancellationToken);
+            return mapper.Map<TagDto>(tag);
+        }
+    }
+}

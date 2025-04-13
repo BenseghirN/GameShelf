@@ -1,6 +1,7 @@
 
 using GameShelf.Application.Interfaces;
 using GameShelf.Domain.Entities;
+using GameShelf.Domain.Enums;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -45,17 +46,18 @@ namespace GameShelf.API.Configuration
             services.AddScoped<IAuthorizationHandler, RoleAuthorizationHandler>();
 
             services.AddAuthorization(options =>
-            options.AddPolicy(name: "Admin", policyBuilder =>
-            {
-                policyBuilder.AddRequirements(new RoleRequirement("Admin"));
-            }));
+                options.AddPolicy(name: "Admin", policyBuilder =>
+                {
+                    policyBuilder.AddRequirements(new RoleRequirement(UserRole.Admin));
+                }
+            ));
 
             return services;
         }
     }
 }
 
-public record RoleRequirement(string Role) : IAuthorizationRequirement;
+public record RoleRequirement(UserRole Role) : IAuthorizationRequirement;
 public class RoleAuthorizationHandler(IGameShelfDbContext dbContext) : AuthorizationHandler<RoleRequirement>()
 {
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, RoleRequirement requirement)

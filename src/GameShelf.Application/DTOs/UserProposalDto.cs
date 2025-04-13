@@ -8,6 +8,6 @@ namespace GameShelf.Application.DTOs
         public Guid PlatformId { get; set; }
         public string ImagePath { get; set; } = string.Empty;
         public DateTime DateSoumission { get; set; }
-        public string Statut { get; set; } = "en attente";
+        public ProposalStatus Statut { get; set; } = ProposalStatus.EnAttente;
     }
 }

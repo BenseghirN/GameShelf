@@ -11,6 +11,7 @@ namespace GameShelf.Domain.Entities
         public Platform Platform { get; set; } = default!;
         public string ImagePath { get; set; } = string.Empty;
         public DateTime DateSoumission { get; set; } = DateTime.UtcNow;
-        public string Statut { get; set; } = "en attente"; // refusé, validé
+        public ProposalStatus Statut { get; set; } = ProposalStatus.EnAttente;
+
     }
 }
