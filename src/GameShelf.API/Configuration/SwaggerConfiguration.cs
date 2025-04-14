@@ -51,7 +51,7 @@ namespace GameShelf.API.Configuration
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "GameShelf API V1");
-                options.RoutePrefix = string.Empty; // Swagger UI à la racine
+                // options.RoutePrefix = string.Empty; // Swagger UI à la racine
             });
         }
     }

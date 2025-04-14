@@ -25,7 +25,7 @@ namespace GameShelf.API.Configuration
                             options.LoginPath = "/api/v1/Auth/connect";     // Triggered when an unauthenticated user hits a protected route
                             options.Cookie.HttpOnly = true;                 // Prevent JS access (XSS protection)
                             options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-                            options.Cookie.SameSite = SameSiteMode.Strict;
+                            options.Cookie.SameSite = SameSiteMode.Strict; // Prevent CSRF attacks
                             options.Cookie.Name = "bff_auth";               // Custom cookie name
                         }
                     )

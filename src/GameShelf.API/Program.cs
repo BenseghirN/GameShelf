@@ -26,7 +26,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerConfiguration();
 }
 
+app.UseDefaultFiles(); // Sert automatiquement index.html s'il existe
+app.UseStaticFiles(new StaticFileOptions
+{
+    OnPrepareResponse = ctx =>
+    {
+        string path = ctx.File.PhysicalPath ?? string.Empty;
+        if (path.EndsWith(".json") || path.EndsWith(".js") || path.EndsWith(".css"))
+        {
+            ctx.Context.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+            ctx.Context.Response.Headers["Pragma"] = "no-cache";
+            ctx.Context.Response.Headers["Expires"] = "0";
+        }
+    }
+});
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
+// Important pour React Router : fallback vers index.html
+app.MapFallbackToFile("index.html");
 app.MapControllers();
 app.Run();

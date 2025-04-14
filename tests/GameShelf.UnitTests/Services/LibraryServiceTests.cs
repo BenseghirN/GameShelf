@@ -22,19 +22,19 @@ namespace GameShelf.UnitTests.Services
 
         public LibraryServiceTests()
         {
-            var options = new DbContextOptionsBuilder<GameShelfDbContext>()
+            DbContextOptions<GameShelfDbContext> options = new DbContextOptionsBuilder<GameShelfDbContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
             _dbContext = new GameShelfDbContext(options);
 
-            var config = new MapperConfiguration(cfg =>
+            MapperConfiguration config = new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile<MappingProfile>();
             });
             _mapper = config.CreateMapper();
 
-            var user = new User
+            User user = new User
             {
                 Id = _userId,
                 ExternalId = "external-id-001",
@@ -67,7 +67,7 @@ namespace GameShelf.UnitTests.Services
             _dbContext.Games.AddRange(user.UserGames.Select(ug => ug.Game));
             _dbContext.SaveChanges();
 
-            var mockSync = new Moq.Mock<IUserSynchronizationService>();
+            Mock<IUserSynchronizationService> mockSync = new Mock<IUserSynchronizationService>();
             mockSync.Setup(s => s.EnsureUserExistsAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(user);
 
@@ -78,7 +78,7 @@ namespace GameShelf.UnitTests.Services
         public async Task AddGameToLibrary_ShouldSucceed()
         {
             Guid gameId = Guid.NewGuid();
-            var result = await _libraryService.AddGameToLibraryAsync(gameId, GameStatus.Possédé, 4, null);
+            UserGameDto result = await _libraryService.AddGameToLibraryAsync(gameId, GameStatus.Possédé, 4, null);
 
             result.Should().NotBeNull();
             result.UserId.Should().Be(_userId);
@@ -90,39 +90,25 @@ namespace GameShelf.UnitTests.Services
         [Fact]
         public async Task GetUserLibrary_ShouldReturnGames()
         {
-            //// Arrange
-            //var gameId1 = Guid.NewGuid();
-            //var gameId2 = Guid.NewGuid();
-            //var game1 = new Game { Id = gameId1, Titre = "Zelda" };
-            //var game2 = new Game { Id = gameId2, Titre = "Mario" };
-            //await _dbContext.Games.AddRangeAsync(game1, game2);
-
-            //var user = await _dbContext.Users.FindAsync(_userId);
-            //user.UserGames = new List<UserGame>
-            //{
-            //    new UserGame { GameId = gameId1, Statut = GameStatus.Terminé, Note = 5 },
-            //    new UserGame { GameId = gameId2, Statut = GameStatus.EnCours, Note = 3 }
-            //};
-
-            //await _dbContext.SaveChangesAsync();
-
             // Act
-            var library = await _libraryService.GetUserLibraryAsync();
+            List<UserGameDto> library = await _libraryService.GetUserLibraryAsync();
 
             // Assert
             library.Should().NotBeNull();
             library.Should().HaveCount(2);
-            //library.First().GameId.Should().Be(gameId1);
-            //library.Last().Statut.Should().Be(GameStatus.EnCours);
         }
 
         [Fact]
         public async Task RemoveGameFromLibrary_ShouldSucceed()
         {
             // Arrange
-            var gameId = Guid.NewGuid();
+            Guid gameId = Guid.NewGuid();
 
-            var user = await _dbContext.Users.FindAsync(_userId);
+            User? user = await _dbContext.Users.FindAsync(_userId);
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
             user.UserGames = new List<UserGame>
             {
                 new UserGame { GameId = gameId, Statut = GameStatus.Possédé, Note = 4 }
@@ -140,9 +126,13 @@ namespace GameShelf.UnitTests.Services
         public async Task UpdateGameStatus_ShouldUpdateCorrectly()
         {
             // Arrange
-            var gameId = Guid.NewGuid();
+            Guid gameId = Guid.NewGuid();
 
-            var user = await _dbContext.Users.FindAsync(_userId);
+            User? user = await _dbContext.Users.FindAsync(_userId);
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
             user.UserGames = new List<UserGame>
             {
                 new UserGame { GameId = gameId, Statut = GameStatus.Possédé, Note = 4 }
@@ -150,7 +140,7 @@ namespace GameShelf.UnitTests.Services
             await _dbContext.SaveChangesAsync();
 
             // Act
-            var updatedGame = await _libraryService.UpdateGameStatusAsync(gameId, GameStatus.Terminé, 5);
+            UserGameDto updatedGame = await _libraryService.UpdateGameStatusAsync(gameId, GameStatus.Terminé, 5);
 
             // Assert
             updatedGame.Should().NotBeNull();
@@ -163,9 +153,14 @@ namespace GameShelf.UnitTests.Services
         public async Task AddGameToLibrary_ShouldNotAddDuplicateGame()
         {
             // Arrange
-            var gameId = Guid.NewGuid();
+            Guid gameId = Guid.NewGuid();
 
-            var user = await _dbContext.Users.FindAsync(_userId);
+            User? user = await _dbContext.Users.FindAsync(_userId);
+
+            if (user == null)
+            {
+                throw new InvalidOperationException("User not found.");
+            }
             user.UserGames = new List<UserGame>
             {
                 new UserGame { GameId = gameId, Statut = GameStatus.Possédé, Note = 4 }
