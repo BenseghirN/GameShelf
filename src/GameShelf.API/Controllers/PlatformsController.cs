@@ -25,7 +25,7 @@ namespace GameShelf.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
-            var platforms = await platformService.GetAllAsync(cancellationToken);
+            List<PlatformDto> platforms = await platformService.GetAllAsync(cancellationToken);
             return Ok(platforms);
         }
 
@@ -43,7 +43,7 @@ namespace GameShelf.API.Controllers
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
-            var platform = await platformService.GetByIdAsync(id, cancellationToken);
+            PlatformDto? platform = await platformService.GetByIdAsync(id, cancellationToken);
             return platform == null ? NotFound() : Ok(platform);
         }
 
@@ -59,7 +59,7 @@ namespace GameShelf.API.Controllers
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Create([FromBody] PlatformDto dto, CancellationToken cancellationToken)
         {
-            var created = await platformService.CreateAsync(dto, cancellationToken);
+            PlatformDto created = await platformService.CreateAsync(dto, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
@@ -76,7 +76,7 @@ namespace GameShelf.API.Controllers
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Update(Guid id, [FromBody] PlatformDto dto, CancellationToken cancellationToken)
         {
-            var updated = await platformService.UpdateAsync(id, dto, cancellationToken);
+            PlatformDto updated = await platformService.UpdateAsync(id, dto, cancellationToken);
             return Ok(updated);
         }
 

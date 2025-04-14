@@ -13,5 +13,14 @@ namespace GameShelf.Domain.Entities
         public DateTime DateSoumission { get; set; } = DateTime.UtcNow;
         public ProposalStatus Statut { get; set; } = ProposalStatus.EnAttente;
 
+        public void Reject()
+        {
+            Statut = ProposalStatus.Refusee;
+        }
+
+        public void SetWaiting()
+        {
+            Statut = ProposalStatus.EnAttente;
+        }
     }
 }

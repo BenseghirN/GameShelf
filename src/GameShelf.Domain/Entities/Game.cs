@@ -15,7 +15,7 @@ namespace GameShelf.Domain.Entities
 
         public void AddTags(IEnumerable<Tag> tagsToAdd)
         {
-            foreach (var tag in tagsToAdd)
+            foreach (Tag tag in tagsToAdd)
             {
                 if (!GameTags.Any(gt => gt.TagId == tag.Id))
                 {
@@ -40,7 +40,7 @@ namespace GameShelf.Domain.Entities
 
         public void AddPlatforms(IEnumerable<Platform> platformsToAdd)
         {
-            foreach (var platform in platformsToAdd)
+            foreach (Platform platform in platformsToAdd)
             {
                 if (!GamePlatforms.Any(gp => gp.PlatformId == platform.Id))
                 {

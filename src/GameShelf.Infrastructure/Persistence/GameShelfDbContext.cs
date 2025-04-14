@@ -14,7 +14,7 @@ public class GameShelfDbContext : DbContext, IGameShelfDbContext
     public DbSet<Platform> Platforms => Set<Platform>();
     public DbSet<GamePlatform> GamePlatforms => Set<GamePlatform>();
     public DbSet<UserGame> UserGames => Set<UserGame>();
-    public DbSet<UserProposal> UserCreatedGames => Set<UserProposal>();
+    public DbSet<UserProposal> UserProposals => Set<UserProposal>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

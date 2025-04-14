@@ -71,18 +71,24 @@ namespace GameShelf.Domain.Entities
             }
         }
 
-        public void ProposeGame(Guid platformId, string titre, string imagePath)
+        public UserProposal ProposeGame(Guid userId, Guid platformId, string titre, string? imagePath = null)
         {
-            Propositions.Add(new UserProposal
+            if (Propositions.Any(p => p.Titre == titre && p.PlatformId == platformId))
+                throw new InvalidOperationException("Cette proposition existe déjà.");
+
+            if (string.IsNullOrWhiteSpace(titre)) throw new ArgumentException("Titre invalide.");
+            UserProposal newProposal = new UserProposal
             {
                 Id = Guid.NewGuid(),
-                UserId = Id,
+                UserId = userId,
                 PlatformId = platformId,
                 Titre = titre,
-                ImagePath = imagePath,
+                ImagePath = string.IsNullOrWhiteSpace(imagePath) ? string.Empty : imagePath,
                 DateSoumission = DateTime.UtcNow,
-                Statut = "en attente"
-            });
+                Statut = ProposalStatus.EnAttente
+            };
+            Propositions.Add(newProposal);
+            return newProposal;
         }
     }
 }

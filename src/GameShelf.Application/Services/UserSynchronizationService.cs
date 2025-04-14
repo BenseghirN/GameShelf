@@ -24,6 +24,7 @@ namespace GameShelf.Application.Services
                 currentUser.GivenName,
                 currentUser.Surname
             );
+            dbContext.Users.Add(user);
             await dbContext.SaveChangesAsync(cancellationToken);
             return user;
         }

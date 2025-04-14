@@ -14,7 +14,7 @@ namespace GameShelf.Application.Interfaces
         DbSet<Platform> Platforms { get; }
         DbSet<GamePlatform> GamePlatforms { get; }
         DbSet<UserGame> UserGames { get; }
-        DbSet<UserProposal> UserCreatedGames { get; }
+        DbSet<UserProposal> UserProposals { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

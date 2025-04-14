@@ -20,6 +20,8 @@ namespace GameShelf.Application.Configuration
             services.AddScoped<IGameService, GameService>();
             services.AddScoped<ITagService, TagService>();
             services.AddScoped<IPlatformService, PlatformService>();
+            services.AddScoped<IUserProposalService, UserProposalService>();
+            services.AddScoped<ILibraryService, LibraryService>();
             #endregion
 
             return services;
