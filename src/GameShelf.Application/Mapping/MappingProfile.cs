@@ -21,7 +21,8 @@ namespace GameShelf.Application.Mapping
             CreateMap<Platform, PlatformDto>().ReverseMap();
             CreateMap<Tag, TagDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<UserGame, UserGameDto>().ReverseMap();
+            CreateMap<UserGame, UserGameDto>()
+                .ForMember(dest => dest.GameName, opt => opt.MapFrom(src => src.Game.Titre));
             CreateMap<UserProposal, UserProposalDto>().ReverseMap();
         }
     }
