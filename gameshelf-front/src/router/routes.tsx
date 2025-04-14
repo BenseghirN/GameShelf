@@ -5,8 +5,8 @@ import LoginPage from '@/pages/LoginPage'
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/" element={<LoginPage  />} />
+      <Route path="/home" element={<HomePage />} />
     </Routes>
   )
 }

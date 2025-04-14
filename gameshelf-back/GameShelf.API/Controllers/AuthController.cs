@@ -1,5 +1,6 @@
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameShelf.API.Controllers
@@ -41,6 +42,15 @@ namespace GameShelf.API.Controllers
             {
                 return Unauthorized(new { message = "User is not authenticated" });
             }
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout([FromQuery] string? returnUrl = "/")
+        {
+            // Supprime le cookie d'authentification
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return Redirect(returnUrl ?? "/");
         }
     }
 }
