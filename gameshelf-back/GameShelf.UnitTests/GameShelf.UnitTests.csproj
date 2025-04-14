@@ -28,9 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\GameShelf.Domain\GameShelf.Domain.csproj" />
-    <ProjectReference Include="..\..\src\GameShelf.Application\GameShelf.Application.csproj" />
-    <ProjectReference Include="..\..\src\GameShelf.Infrastructure\GameShelf.Infrastructure.csproj" />
+    <ProjectReference Include="..\GameShelf.Domain\GameShelf.Domain.csproj" />
+    <ProjectReference Include="..\GameShelf.Application\GameShelf.Application.csproj" />
+    <ProjectReference Include="..\GameShelf.Infrastructure\GameShelf.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

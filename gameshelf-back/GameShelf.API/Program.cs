@@ -43,7 +43,14 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
-// Important pour React Router : fallback vers index.html
-app.MapFallbackToFile("index.html");
 app.MapControllers();
+// Important pour React Router : fallback vers index.html
+app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), subApp =>
+{
+    subApp.UseRouting();
+    subApp.UseEndpoints(endpoints =>
+    {
+        endpoints.MapFallbackToFile("index.html");
+    });
+});
 app.Run();

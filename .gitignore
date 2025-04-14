@@ -399,7 +399,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-/src/GameShelf.API/wwwroot/*
-!/src/GameShelf.API/wwwroot/.gitkeep
+/gameshelf-back/GameShelf.API/wwwroot/*
+!/gameshelf-back/GameShelf.API/wwwroot/.gitkeep
 
 

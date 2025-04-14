@@ -11,8 +11,11 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: '../../src/GameShelf.API/wwwroot', // build directement dans ton dossier .NET
+    outDir: '../gameshelf-back/GameShelf.API/wwwroot', // build directement dans ton dossier .NET
     emptyOutDir: true, // vide le dossier avant chaque build
+    rollupOptions: {
+      input: path.resolve(__dirname, 'index.html'),
+    },
   },
   server: {
     port: 5173,
