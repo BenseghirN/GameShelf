@@ -12,7 +12,7 @@ builder.Services.AddSwaggerConfiguration(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddAuthorization();
-builder.Services.AddAuthenticationConfiguration();
+builder.Services.AddAuthenticationConfiguration(builder.Configuration);
 
 // Add custom services and configurations
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -26,8 +26,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerConfiguration();
 }
 
+// 🔐 Redirection HTTPS
+app.UseHttpsRedirection();
+
+// 🔑 Auth
+app.UseAuthentication();
+app.UseAuthorization();
+
+// 🧩 Serveur de fichiers statiques pour ton frontend
 app.UseDefaultFiles(); // Sert automatiquement index.html s'il existe
-app.UseStaticFiles(new StaticFileOptions
+app.UseStaticFiles(new StaticFileOptions // Sert les fichiers statiques (CSS, JS, images, etc.)
 {
     OnPrepareResponse = ctx =>
     {
@@ -41,18 +49,19 @@ app.UseStaticFiles(new StaticFileOptions
     }
 });
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
+// 🌐 Contrôleurs API (doivent passer AVANT fallback)
 app.MapControllers();
-// Important pour React Router : fallback vers index.html
-app.MapWhen(ctx => !ctx.Request.Path.StartsWithSegments("/api"), subApp =>
-{
-    subApp.UseRouting();
-    subApp.UseAuthorization();
-    subApp.UseEndpoints(endpoints =>
+
+// 🎯 Fallback pour le routage SPA (React Router par ex) important pour React Router : fallback vers index.html
+app.MapWhen(context =>
+    !context.Request.Path.StartsWithSegments("/api"),
+    branch =>
     {
-        endpoints.MapFallbackToFile("index.html");
-    });
-});
+        branch.UseRouting();
+        branch.UseEndpoints(endpoints =>
+        {
+            endpoints.MapFallbackToFile("index.html");
+        });
+    }
+);
 app.Run();
