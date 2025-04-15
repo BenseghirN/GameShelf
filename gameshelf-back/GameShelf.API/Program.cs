@@ -62,6 +62,7 @@ app.MapWhen(context =>
     branch =>
     {
         branch.UseRouting();
+        branch.UseAuthorization();
         branch.UseEndpoints(endpoints =>
         {
             endpoints.MapFallbackToFile("index.html");
