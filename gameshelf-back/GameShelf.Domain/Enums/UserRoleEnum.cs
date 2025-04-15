@@ -1,7 +1,12 @@
-namespace GameShelf.Domain.Enums;
+using System.Runtime.Serialization;
 
-public enum UserRole
+namespace GameShelf.Domain.Enums
 {
-    User,
-    Admin
+    public enum UserRole
+    {
+        [EnumMember(Value = "Utilisateur")]
+        User,
+        [EnumMember(Value = "Administrateur")]
+        Admin
+    }
 }

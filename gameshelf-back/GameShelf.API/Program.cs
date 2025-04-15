@@ -1,12 +1,16 @@
 using GameShelf.API.Configuration;
 using GameShelf.Infrastructure.Configuration;
 using GameShelf.Application.Configuration;
+using System.Text.Json.Serialization;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddApiVersioningConfiguration();
 builder.Services.AddSwaggerConfiguration(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();

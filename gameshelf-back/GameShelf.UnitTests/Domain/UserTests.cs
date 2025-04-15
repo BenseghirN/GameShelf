@@ -12,7 +12,7 @@ namespace GameShelf.UnitTests.Services
             User user = new User { Id = Guid.NewGuid() };
             Guid gameId = Guid.NewGuid();
 
-            user.AddGame(gameId, GameStatus.Possédé, 5);
+            user.AddGame(gameId, GameStatus.Possede, 5);
 
             user.UserGames.Should().ContainSingle(ug => ug.GameId == gameId);
         }

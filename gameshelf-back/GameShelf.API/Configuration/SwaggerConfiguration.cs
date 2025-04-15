@@ -8,12 +8,12 @@ namespace GameShelf.API.Configuration
         public static void AddSwaggerConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddEndpointsApiExplorer();
-
             services.AddSwaggerGen(options =>
             {
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 options.IncludeXmlComments(xmlPath);
+                options.UseInlineDefinitionsForEnums();
 
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {

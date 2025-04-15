@@ -38,7 +38,7 @@ namespace GameShelf.Domain.Entities
             };
         }
 
-        public void AddGame(Guid gameId, GameStatus statut = GameStatus.Possédé, int? note = null)
+        public void AddGame(Guid gameId, GameStatus statut = GameStatus.Possede, int? note = null)
         {
             if (UserGames.Any(g => g.GameId == gameId))
                 throw new InvalidOperationException("Ce jeu est déjà présent dans la collection.");

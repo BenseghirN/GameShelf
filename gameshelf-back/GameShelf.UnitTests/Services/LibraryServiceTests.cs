@@ -47,7 +47,7 @@ namespace GameShelf.UnitTests.Services
                         UserId = _userId,
                         GameId = _gameId1,
                         Game = new Game { Id = _gameId1, Titre = "Zelda" },
-                        Statut = GameStatus.Terminé,
+                        Statut = GameStatus.Termine,
                         Note = 5,
                         DateAjout = DateTime.UtcNow
                     },
@@ -78,12 +78,12 @@ namespace GameShelf.UnitTests.Services
         public async Task AddGameToLibrary_ShouldSucceed()
         {
             Guid gameId = Guid.NewGuid();
-            UserGameDto result = await _libraryService.AddGameToLibraryAsync(gameId, GameStatus.Possédé, 4, null);
+            UserGameDto result = await _libraryService.AddGameToLibraryAsync(gameId, GameStatus.Possede, 4, null);
 
             result.Should().NotBeNull();
             result.UserId.Should().Be(_userId);
             result.GameId.Should().Be(gameId);
-            result.Statut.Should().Be(GameStatus.Possédé);
+            result.Statut.Should().Be(GameStatus.Possede);
             result.Note.Should().Be(4);
         }
 
@@ -111,7 +111,7 @@ namespace GameShelf.UnitTests.Services
             }
             user.UserGames = new List<UserGame>
             {
-                new UserGame { GameId = gameId, Statut = GameStatus.Possédé, Note = 4 }
+                new UserGame { GameId = gameId, Statut = GameStatus.Possede, Note = 4 }
             };
             await _dbContext.SaveChangesAsync();
 
@@ -135,17 +135,17 @@ namespace GameShelf.UnitTests.Services
             }
             user.UserGames = new List<UserGame>
             {
-                new UserGame { GameId = gameId, Statut = GameStatus.Possédé, Note = 4 }
+                new UserGame { GameId = gameId, Statut = GameStatus.Possede, Note = 4 }
             };
             await _dbContext.SaveChangesAsync();
 
             // Act
-            UserGameDto updatedGame = await _libraryService.UpdateGameStatusAsync(gameId, GameStatus.Terminé, 5);
+            UserGameDto updatedGame = await _libraryService.UpdateGameStatusAsync(gameId, GameStatus.Termine, 5);
 
             // Assert
             updatedGame.Should().NotBeNull();
             updatedGame.GameId.Should().Be(gameId);
-            updatedGame.Statut.Should().Be(GameStatus.Terminé);
+            updatedGame.Statut.Should().Be(GameStatus.Termine);
             updatedGame.Note.Should().Be(5);
         }
 
@@ -163,12 +163,12 @@ namespace GameShelf.UnitTests.Services
             }
             user.UserGames = new List<UserGame>
             {
-                new UserGame { GameId = gameId, Statut = GameStatus.Possédé, Note = 4 }
+                new UserGame { GameId = gameId, Statut = GameStatus.Possede, Note = 4 }
             };
             await _dbContext.SaveChangesAsync();
 
             // Act
-            Func<Task> act = async () => await _libraryService.AddGameToLibraryAsync(gameId, GameStatus.Possédé, 4, null);
+            Func<Task> act = async () => await _libraryService.AddGameToLibraryAsync(gameId, GameStatus.Possede, 4, null);
 
             // Assert
             await act.Should().ThrowAsync<InvalidOperationException>()

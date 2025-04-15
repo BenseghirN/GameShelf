@@ -8,7 +8,7 @@ namespace GameShelf.Domain.Entities
         public User User { get; set; } = default!;
         public Guid GameId { get; set; }
         public Game Game { get; set; } = default!;
-        public GameStatus Statut { get; set; } = GameStatus.Possédé;
+        public GameStatus Statut { get; set; } = GameStatus.Possede;
         public int? Note { get; set; }
         public string? ImagePersoPath { get; set; }
         public DateTime DateAjout { get; set; } = DateTime.UtcNow;

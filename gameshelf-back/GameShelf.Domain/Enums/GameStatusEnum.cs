@@ -1,8 +1,14 @@
-namespace GameShelf.Domain.Enums;
+using System.Runtime.Serialization;
 
-public enum GameStatus
+namespace GameShelf.Domain.Enums
 {
-    Terminé,
-    Possédé,
-    EnCours,
+    public enum GameStatus
+    {
+        [EnumMember(Value = "Terminé")]
+        Termine,
+        [EnumMember(Value = "Possédé")]
+        Possede,
+        [EnumMember(Value = "En cours")]
+        EnCours,
+    }
 }

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GameShelf.API.Controllers
 {
+    /// <summary>
+    /// Gère les jeux disponibles dans le système.
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -17,8 +20,9 @@ namespace GameShelf.API.Controllers
         /// <summary>
         /// Récupère tous les jeux disponibles.
         /// </summary>
-        /// <returns>Liste des jeux</returns>
-        /// <response code="200">Liste retournée avec succès</response>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Liste des jeux.</returns>
+        /// <response code="200">Liste retournée avec succès.</response>
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
@@ -29,10 +33,11 @@ namespace GameShelf.API.Controllers
         /// <summary>
         /// Récupère un jeu par son identifiant.
         /// </summary>
-        /// <param name="id">ID du jeu</param>
-        /// <returns>Détails du jeu</returns>
-        /// <response code="200">Jeu trouvé</response>
-        /// <response code="404">Jeu introuvable</response>
+        /// <param name="id">ID du jeu.</param>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Détails du jeu.</returns>
+        /// <response code="200">Jeu trouvé.</response>
+        /// <response code="404">Jeu introuvable.</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
@@ -41,11 +46,12 @@ namespace GameShelf.API.Controllers
         }
 
         /// <summary>
-        /// Crée un nouveau jeu.
+        /// Crée un nouveau jeu (admin uniquement).
         /// </summary>
-        /// <param name="dto">Jeu à créer</param>
-        /// <returns>Jeu créé</returns>
-        /// <response code="201">Jeu créé avec succès</response>
+        /// <param name="dto">Données du jeu à créer.</param>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Le jeu nouvellement créé.</returns>
+        /// <response code="201">Jeu créé avec succès.</response>
         [HttpPost]
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Create(GameDto dto, CancellationToken cancellationToken)
@@ -55,12 +61,13 @@ namespace GameShelf.API.Controllers
         }
 
         /// <summary>
-        /// Met à jour un jeu existant.
+        /// Met à jour un jeu existant (admin uniquement).
         /// </summary>
-        /// <param name="id">ID du jeu à modifier</param>
-        /// <param name="dto">Jeu mis à jour</param>
-        /// <returns>Jeu modifié</returns>
-        /// <response code="200">Mise à jour réussie</response>
+        /// <param name="id">ID du jeu à modifier.</param>
+        /// <param name="dto">Données mises à jour.</param>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Le jeu mis à jour.</returns>
+        /// <response code="200">Mise à jour réussie.</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Update(Guid id, GameDto dto, CancellationToken cancellationToken)
@@ -70,10 +77,11 @@ namespace GameShelf.API.Controllers
         }
 
         /// <summary>
-        /// Supprime un jeu.
+        /// Supprime un jeu (admin uniquement).
         /// </summary>
-        /// <param name="id">ID du jeu à supprimer</param>
-        /// <response code="204">Jeu supprimé</response>
+        /// <param name="id">ID du jeu à supprimer.</param>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <response code="204">Jeu supprimé avec succès.</response>
         [HttpDelete("{id}")]
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)

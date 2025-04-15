@@ -17,6 +17,7 @@ namespace GameShelf.API.Configuration
             string authority = azureB2CSection["Authority"] ?? throw new ArgumentNullException("Authority");
             string clientId = azureB2CSection["ClientId"] ?? throw new ArgumentNullException("ClientId");
             string callbackPath = azureB2CSection["CallbackPath"] ?? throw new ArgumentNullException("CallbackPath");
+            string OpenIdScheme = azureB2CSection["OpenIdScheme"] ?? throw new ArgumentNullException("OpenIdScheme");
 
             services.AddAuthentication(options =>
                         {
@@ -46,7 +47,7 @@ namespace GameShelf.API.Configuration
                             };
                         }
                     )
-                    .AddOpenIdConnect("GameShelf_OAuth2_B2C", options =>
+                    .AddOpenIdConnect(OpenIdScheme, options =>
                         {
                             options.Authority = authority;
                             options.ClientId = clientId;

@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GameShelf.API.Controllers
 {
+    /// <summary>
+    /// Gère les tags utilisés pour catégoriser les jeux.
+    /// </summary>
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -15,9 +18,11 @@ namespace GameShelf.API.Controllers
     public class TagsController(ITagService tagService) : ControllerBase
     {
         /// <summary>
-        /// Récupère tous les tags.
+        /// Récupère la liste de tous les tags.
         /// </summary>
-        /// <response code="200">Liste des tags retournée avec succès</response>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Liste des tags disponibles.</returns>
+        /// <response code="200">Liste des tags retournée avec succès.</response>
         [HttpGet]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
@@ -26,9 +31,12 @@ namespace GameShelf.API.Controllers
         }
 
         /// <summary>
-        /// Crée un nouveau tag (admin uniquement).
+        /// Crée un nouveau tag (réservé aux administrateurs).
         /// </summary>
-        /// <response code="201">Tag créé avec succès</response>
+        /// <param name="dto">Données du tag à créer.</param>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Le tag nouvellement créé.</returns>
+        /// <response code="201">Tag créé avec succès.</response>
         [HttpPost]
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Create(TagDto dto, CancellationToken cancellationToken)
@@ -38,10 +46,13 @@ namespace GameShelf.API.Controllers
         }
 
         /// <summary>
-        /// Met à jour un tag (admin uniquement).
+        /// Met à jour un tag existant (admin uniquement).
         /// </summary>
-        /// <param name="id">ID du tag</param>
-        /// <response code="200">Tag mis à jour avec succès</response>
+        /// <param name="id">Identifiant du tag.</param>
+        /// <param name="dto">Données mises à jour.</param>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Le tag mis à jour.</returns>
+        /// <response code="200">Tag mis à jour avec succès.</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Update(int id, TagDto dto, CancellationToken cancellationToken)
@@ -51,10 +62,11 @@ namespace GameShelf.API.Controllers
         }
 
         /// <summary>
-        /// Supprime un tag (admin uniquement).
+        /// Supprime un tag existant (admin uniquement).
         /// </summary>
-        /// <param name="id">ID du tag</param>
-        /// <response code="204">Tag supprimé avec succès</response>
+        /// <param name="id">Identifiant du tag.</param>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <response code="204">Tag supprimé avec succès.</response>
         [HttpDelete("{id}")]
         [Authorize(Policy = "Admin")]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)

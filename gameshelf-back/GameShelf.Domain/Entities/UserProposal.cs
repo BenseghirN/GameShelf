@@ -1,3 +1,5 @@
+using GameShelf.Domain.Enums;
+
 namespace GameShelf.Domain.Entities
 {
     public class UserProposal
