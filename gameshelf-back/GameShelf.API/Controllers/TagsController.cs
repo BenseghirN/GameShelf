@@ -22,8 +22,9 @@ namespace GameShelf.API.Controllers
         /// </summary>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Liste des tags disponibles.</returns>
-        /// <response code="200">Liste des tags retournée avec succès.</response>
         [HttpGet]
+        [ProducesResponseType(typeof(List<TagDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             List<TagDto> tags = await tagService.GetAllAsync(cancellationToken);
@@ -36,9 +37,12 @@ namespace GameShelf.API.Controllers
         /// <param name="dto">Données du tag à créer.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Le tag nouvellement créé.</returns>
-        /// <response code="201">Tag créé avec succès.</response>
         [HttpPost]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(typeof(TagDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create(TagDto dto, CancellationToken cancellationToken)
         {
             TagDto tag = await tagService.CreateAsync(dto, cancellationToken);
@@ -52,9 +56,12 @@ namespace GameShelf.API.Controllers
         /// <param name="dto">Données mises à jour.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Le tag mis à jour.</returns>
-        /// <response code="200">Tag mis à jour avec succès.</response>
         [HttpPut("{id}")]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(typeof(TagDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Update(int id, TagDto dto, CancellationToken cancellationToken)
         {
             TagDto tag = await tagService.UpdateAsync(id, dto, cancellationToken);
@@ -66,9 +73,11 @@ namespace GameShelf.API.Controllers
         /// </summary>
         /// <param name="id">Identifiant du tag.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <response code="204">Tag supprimé avec succès.</response>
         [HttpDelete("{id}")]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
         {
             await tagService.DeleteAsync(id, cancellationToken);

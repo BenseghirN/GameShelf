@@ -23,8 +23,10 @@ namespace GameShelf.API.Controllers
         /// <param name="dto">Données de la proposition.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>La proposition créée.</returns>
-        /// <response code="201">Proposition créée avec succès.</response>
         [HttpPost]
+        [ProducesResponseType(typeof(UserProposalDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Create([FromBody] NewProposalDto dto, CancellationToken cancellationToken)
         {
             UserProposalDto created = await userProposalService.CreateAsync(dto, cancellationToken);
@@ -36,9 +38,11 @@ namespace GameShelf.API.Controllers
         /// </summary>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Liste des propositions.</returns>
-        /// <response code="200">Liste récupérée avec succès.</response>
         [HttpGet]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(typeof(List<UserProposalDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             List<UserProposalDto> proposals = await userProposalService.GetAllAsync(cancellationToken);
@@ -51,12 +55,16 @@ namespace GameShelf.API.Controllers
         /// <param name="id">Identifiant de la proposition à accepter.</param>
         /// <param name="dto">Données complémentaires (description, tags).</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <response code="204">Proposition acceptée avec succès.</response>
         [HttpPut("{id}/accept")]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Accept(Guid id, [FromBody] AcceptProposalDto dto, CancellationToken cancellationToken)
         {
-            await userProposalService.AcceptAsync(id, dto.Description, dto.Tags, cancellationToken);
+            await userProposalService.AcceptAsync(id, dto.Description, dto.TagIds, cancellationToken);
             return NoContent();
         }
 
@@ -65,9 +73,12 @@ namespace GameShelf.API.Controllers
         /// </summary>
         /// <param name="id">Identifiant de la proposition à rejeter.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <response code="204">Proposition rejetée avec succès.</response>
         [HttpPut("{id}/reject")]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Reject(Guid id, CancellationToken cancellationToken)
         {
             await userProposalService.RejectAsync(id, cancellationToken);

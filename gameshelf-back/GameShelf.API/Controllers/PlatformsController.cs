@@ -22,10 +22,9 @@ namespace GameShelf.API.Controllers
         /// </summary>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Liste des plateformes disponibles.</returns>
-        /// <response code="200">Liste récupérée avec succès.</response>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<PlatformDto>), StatusCodes.Status200OK)]
-        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             List<PlatformDto> platforms = await platformService.GetAllAsync(cancellationToken);
@@ -38,12 +37,12 @@ namespace GameShelf.API.Controllers
         /// <param name="id">Identifiant de la plateforme.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Détails de la plateforme.</returns>
-        /// <response code="200">Plateforme trouvée.</response>
-        /// <response code="404">Plateforme introuvable.</response>
         [HttpGet("{id}")]
+        [Authorize(Policy = "Admin")]
         [ProducesResponseType(typeof(PlatformDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [Authorize(Policy = "Admin")]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
         {
             PlatformDto? platform = await platformService.GetByIdAsync(id, cancellationToken);
@@ -56,10 +55,12 @@ namespace GameShelf.API.Controllers
         /// <param name="dto">Données de la plateforme à créer.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Plateforme créée.</returns>
-        /// <response code="201">Création réussie.</response>
         [HttpPost]
-        [ProducesResponseType(typeof(PlatformDto), StatusCodes.Status201Created)]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(typeof(PlatformDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Create([FromBody] PlatformDto dto, CancellationToken cancellationToken)
         {
             PlatformDto created = await platformService.CreateAsync(dto, cancellationToken);
@@ -73,25 +74,29 @@ namespace GameShelf.API.Controllers
         /// <param name="dto">Données mises à jour.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Plateforme mise à jour.</returns>
-        /// <response code="200">Mise à jour réussie.</response>
         [HttpPut("{id}")]
-        [ProducesResponseType(typeof(PlatformDto), StatusCodes.Status200OK)]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(typeof(PlatformDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Update(Guid id, [FromBody] PlatformDto dto, CancellationToken cancellationToken)
         {
             PlatformDto updated = await platformService.UpdateAsync(id, dto, cancellationToken);
             return Ok(updated);
         }
 
+
         /// <summary>
         /// Supprime une plateforme par son identifiant (admin uniquement).
         /// </summary>
         /// <param name="id">ID de la plateforme à supprimer.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <response code="204">Suppression réussie.</response>
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [Authorize(Policy = "Admin")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
             await platformService.DeleteAsync(id, cancellationToken);

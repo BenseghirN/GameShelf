@@ -8,12 +8,16 @@ namespace GameShelf.Application.Services
 {
     public class UserProposalService(IGameShelfDbContext dbContext, IMapper mapper, IUserSynchronizationService userSynchronizationService) : IUserProposalService
     {
-        public async Task AcceptAsync(Guid proposalId, string description, List<TagDto> tags, CancellationToken cancellationToken = default)
+        public async Task AcceptAsync(Guid proposalId, string description, List<Guid> tagIds, CancellationToken cancellationToken = default)
         {
             UserProposal? proposal = await dbContext.UserProposals
                 .Include(p => p.Platform)
                 .FirstOrDefaultAsync(p => p.Id == proposalId, cancellationToken);
             if (proposal == null) throw new KeyNotFoundException("Proposition introuvable");
+
+            List<Tag> tags = await dbContext.Tags
+                .Where(t => tagIds.Contains(t.Id))
+                .ToListAsync(cancellationToken);
 
             Game game = new Game
             {
@@ -24,7 +28,7 @@ namespace GameShelf.Application.Services
             };
 
             game.AddPlatforms(new[] { proposal.Platform });
-            game.AddTags(mapper.Map<List<Tag>>(tags));
+            game.AddTags(tags);
 
             dbContext.Games.Add(game);
             dbContext.UserProposals.Remove(proposal);

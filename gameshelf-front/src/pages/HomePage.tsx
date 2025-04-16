@@ -15,9 +15,16 @@ export default function HomePage() {
     <>
       <h1>Bienvenue sur GameShelf 🎮</h1>
       {user?.pseudo}
+      {""}
       {user?.givenName}
+      {""}
       {user?.surname}
-
+      {""}
+      {user?.email}
+      {""}
+      {user?.role}
+      {""}
+      {user?.isAdmin}
       <Button color="inherit" onClick={handleLogout}>
         Se déconnecter
       </Button>

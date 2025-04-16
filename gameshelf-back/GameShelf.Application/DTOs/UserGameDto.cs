@@ -13,6 +13,9 @@ namespace GameShelf.Application.DTOs
         /// <summary>Identifiant du jeu.</summary>
         public Guid GameId { get; set; }
 
+        /// <summary>Identifiant du jeu.</summary>
+        public GameDto? Game { get; set; } = null;
+
         /// <summary>Nom du jeu.</summary>
         public string GameName { get; set; } = string.Empty;
 

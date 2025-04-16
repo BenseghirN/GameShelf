@@ -18,12 +18,13 @@ namespace GameShelf.API.Controllers
     public class LibraryController(ILibraryService libraryService) : ControllerBase
     {
         /// <summary>
-        /// Récupère la bibliothèque de l'utilisateur connecté.
+        /// Récupère la bibliothèque de jeux de l'utilisateur actuellement connecté.
         /// </summary>
         /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <returns>Liste des jeux de la bibliothèque.</returns>
-        /// <response code="200">Liste récupérée avec succès.</response>
+        /// <returns>Liste des jeux ajoutés par l'utilisateur à sa bibliothèque.</returns>
         [HttpGet]
+        [ProducesResponseType(typeof(List<UserGameDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> GetMyLibrary(CancellationToken cancellationToken)
         {
             List<UserGameDto> games = await libraryService.GetUserLibraryAsync(cancellationToken);
@@ -34,11 +35,13 @@ namespace GameShelf.API.Controllers
         /// Ajoute un jeu à la bibliothèque de l'utilisateur.
         /// </summary>
         /// <param name="gameId">Identifiant du jeu à ajouter.</param>
-        /// <param name="dto">Données liées à l'ajout du jeu.</param>
+        /// <param name="dto">Données de statut, note et image personnalisée.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <returns>Jeu ajouté à la bibliothèque.</returns>
-        /// <response code="200">Jeu ajouté avec succès.</response>
+        /// <returns>Le jeu ajouté dans la bibliothèque de l'utilisateur.</returns>
         [HttpPost("{gameId}")]
+        [ProducesResponseType(typeof(UserGameDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         public async Task<IActionResult> Add(Guid gameId, [FromBody] AddToLibraryDto dto, CancellationToken cancellationToken)
         {
             UserGameDto result = await libraryService.AddGameToLibraryAsync(gameId, dto.Statut, dto.Note, dto.ImagePersoPath, cancellationToken);
@@ -46,14 +49,17 @@ namespace GameShelf.API.Controllers
         }
 
         /// <summary>
-        /// Met à jour le statut ou la note d’un jeu dans la bibliothèque.
+        /// Met à jour le statut ou la note d’un jeu dans la bibliothèque de l'utilisateur.
         /// </summary>
-        /// <param name="gameId">Identifiant du jeu.</param>
-        /// <param name="dto">Données mises à jour.</param>
+        /// <param name="gameId">Identifiant du jeu à mettre à jour.</param>
+        /// <param name="dto">Nouvelles valeurs de statut et/ou de note.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <returns>Jeu mis à jour.</returns>
-        /// <response code="200">Mise à jour réussie.</response>
+        /// <returns>Le jeu mis à jour dans la bibliothèque.</returns>
         [HttpPut("{gameId}")]
+        [ProducesResponseType(typeof(UserGameDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Update(Guid gameId, [FromBody] UpdateLibraryDto dto, CancellationToken cancellationToken)
         {
             UserGameDto result = await libraryService.UpdateGameStatusAsync(gameId, dto.Statut, dto.Note, cancellationToken);
@@ -65,8 +71,10 @@ namespace GameShelf.API.Controllers
         /// </summary>
         /// <param name="gameId">Identifiant du jeu à retirer.</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
-        /// <response code="204">Suppression réussie.</response>
         [HttpDelete("{gameId}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Remove(Guid gameId, CancellationToken cancellationToken)
         {
             await libraryService.RemoveGameFromLibraryAsync(gameId, cancellationToken);

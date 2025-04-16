@@ -7,7 +7,7 @@ namespace GameShelf.Application.DTOs
     {
         /// <summary>Description du jeu tel qu'il sera enregistré.</summary>
         public string Description { get; set; } = string.Empty;
-        /// <summary>Liste de tags associés au jeu accepté.</summary>
-        public List<TagDto> Tags { get; set; } = new();
+        /// <summary>Liste des guids de tags associés au jeu accepté.</summary>
+        public List<Guid> TagIds { get; set; } = new();
     }
 }

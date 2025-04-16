@@ -82,8 +82,10 @@ public class RoleAuthorizationHandler(IGameShelfDbContext dbContext) : Authoriza
 {
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, RoleRequirement requirement)
     {
-        string userEmail = context.User.FindFirst("email")?.Value ?? string.Empty;
-        User? user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == userEmail);
+        string externalId = context.User.FindFirst("http://schemas.microsoft.com/identity/claims/objectidentifier")?.Value ?? string.Empty;
+        if (string.IsNullOrWhiteSpace(externalId))
+            return;
+        User? user = await dbContext.Users.FirstOrDefaultAsync(u => u.ExternalId == externalId);
 
         if (user != null && user.Role == requirement.Role)
         {

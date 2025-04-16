@@ -4,7 +4,6 @@ using GameShelf.Application.Interfaces;
 using GameShelf.Domain.Entities;
 using GameShelf.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace GameShelf.Application.Services
 {
@@ -46,9 +45,15 @@ namespace GameShelf.Application.Services
         {
             User? currentUser = await userSynchronizationService.EnsureUserExistsAsync() ?? throw new UnauthorizedAccessException();
             User? user = await dbContext.Users
-                .Include(u => u.UserGames)
-                    .ThenInclude(ug => ug.Game)
-                .FirstOrDefaultAsync(u => u.Id == currentUser.Id, cancellationToken);
+                            .Include(u => u.UserGames)
+                                .ThenInclude(ug => ug.Game)
+                                    .ThenInclude(g => g.GameTags)
+                                        .ThenInclude(gt => gt.Tag)
+                            .Include(u => u.UserGames)
+                                .ThenInclude(ug => ug.Game)
+                                    .ThenInclude(g => g.GamePlatforms)
+                                        .ThenInclude(gp => gp.Platform)
+                            .FirstOrDefaultAsync(u => u.Id == currentUser.Id, cancellationToken);
 
             return user ?? throw new Exception("Utilisateur introuvable.");
         }

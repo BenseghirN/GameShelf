@@ -24,9 +24,9 @@ namespace GameShelf.Application.DTOs
         public string ImagePath { get; set; } = string.Empty;
 
         /// <summary>Liste des tags associés.</summary>
-        public List<string> Tags { get; set; } = new();
+        public List<TagDto> Tags { get; set; } = new();
 
         /// <summary>Liste des plateformes disponibles pour ce jeu.</summary>
-        public List<string> Platforms { get; set; } = new();
+        public List<PlatformDto> Platforms { get; set; } = new();
     }
 }

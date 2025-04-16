@@ -1,6 +1,7 @@
 using GameShelf.Application.Interfaces;
 using GameShelf.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 
 public class GameShelfDbContext : DbContext, IGameShelfDbContext
 {
@@ -18,6 +19,19 @@ public class GameShelfDbContext : DbContext, IGameShelfDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
+        // Utilisation de GUIDs séquentiels pour les clés primaires
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var idProperty = entityType.FindProperty("Id");
+
+            if (idProperty is not null && idProperty.ClrType == typeof(Guid))
+            {
+                idProperty.SetValueGeneratorFactory((p, e) => new SequentialGuidValueGenerator());
+            }
+        }
+
         // PK composées pour les entités de jointure
         modelBuilder.Entity<GameTag>()
             .HasKey(gt => new { gt.GameId, gt.TagId });
