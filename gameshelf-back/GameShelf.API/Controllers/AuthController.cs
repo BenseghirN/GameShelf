@@ -1,4 +1,6 @@
 using Asp.Versioning;
+using GameShelf.Application.DTOs;
+using GameShelf.Application.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +15,7 @@ namespace GameShelf.API.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [Produces("application/json")]
     [Consumes("application/json")]
-    public class AuthController(IConfiguration configuration) : ControllerBase
+    public class AuthController(IConfiguration configuration, IUserSynchronizationService userSynchronizationService) : ControllerBase
     {
         /// <summary>
         /// Redirige l’utilisateur vers Azure B2C pour l’authentification.
@@ -42,6 +44,29 @@ namespace GameShelf.API.Controllers
             if (User.Identity?.IsAuthenticated == true)
             {
                 return Ok(new { claims = User.Claims.Select(c => new { c.Type, c.Value }).ToArray() });
+            }
+            else
+            {
+                return Unauthorized(new { message = "User is not authenticated" });
+            }
+        }
+
+        /// <summary>
+        /// Retourne les informations de l’utilisateur actuellement authentifié.
+        /// </summary>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Informations de l'utilisateur actuellement authentifié</returns>
+        /// <response code="200">>Utilisateur authentifié, informations retournées.</response>
+        /// <response code="404">Utilisateur introuvable.</response>
+        /// <response code="401">Aucun utilisateur connecté.</response>
+        [HttpGet("user-info")]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetUserInfo(CancellationToken cancellationToken)
+        {
+            if (User.Identity?.IsAuthenticated == true)
+            {
+                var user = await userSynchronizationService.GetCurrentUserInfosAsync(cancellationToken);
+                return user == null ? NotFound() : Ok(user);
             }
             else
             {

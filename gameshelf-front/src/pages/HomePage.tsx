@@ -1,17 +1,32 @@
+import { useAppSelector } from "@/store/hooks";
 import { Button, Chip } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
-// console.log("✅ React a bien démarré");
-const handleLogout = () => {
-  window.location.href = `${
-    import.meta.env.VITE_API_BASE_URL
-  }/Auth/logout?returnUrl=/`;
-};
 export default function HomePage() {
+  const user = useAppSelector((state) => state.auth.user);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    window.location.href = `${
+      import.meta.env.VITE_API_BASE_URL
+    }/Auth/logout?returnUrl=/`;
+  };
+
   return (
     <>
       <h1>Bienvenue sur GameShelf 🎮</h1>
+      {user?.pseudo}
+      {user?.givenName}
+      {user?.surname}
+
       <Button color="inherit" onClick={handleLogout}>
         Se déconnecter
+      </Button>
+      <Button
+        color="primary"
+        variant="contained"
+        onClick={() => navigate("/test")}
+      >
+        Goto Test
       </Button>
       <Button color="primary" variant="contained">
         Ajouter un jeu

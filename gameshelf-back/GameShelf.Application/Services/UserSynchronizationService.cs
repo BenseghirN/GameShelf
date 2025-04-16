@@ -1,3 +1,4 @@
+using AutoMapper;
 using GameShelf.Application.DTOs;
 using GameShelf.Application.Interfaces;
 using GameShelf.Domain.Entities;
@@ -5,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GameShelf.Application.Services
 {
-    public class UserSynchronizationService(IAuthService authService, IGameShelfDbContext dbContext) : IUserSynchronizationService
+    public class UserSynchronizationService(IAuthService authService, IGameShelfDbContext dbContext, IMapper mapper) : IUserSynchronizationService
     {
         public async Task<User> EnsureUserExistsAsync(CancellationToken cancellationToken = default)
         {
@@ -27,6 +28,12 @@ namespace GameShelf.Application.Services
             dbContext.Users.Add(user);
             await dbContext.SaveChangesAsync(cancellationToken);
             return user;
+        }
+
+        public async Task<UserDto> GetCurrentUserInfosAsync(CancellationToken cancellationToken = default)
+        {
+            User user = await EnsureUserExistsAsync(cancellationToken);
+            return mapper.Map<UserDto>(user);
         }
     }
 }
