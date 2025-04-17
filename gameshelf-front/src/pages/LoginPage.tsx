@@ -9,7 +9,7 @@ export default function LoginPage() {
     const returnUrl = encodeURIComponent("/home");
     const loginUrl = `${
       import.meta.env.VITE_API_BASE_URL
-    }/Auth/connect?returnUrl=${returnUrl}`;
+    }/api/v1/Auth/connect?returnUrl=${returnUrl}`;
     window.location.href = loginUrl;
   };
   return (

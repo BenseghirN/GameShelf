@@ -3,6 +3,8 @@ import MainLayout from "@/components/layout/MainLayout";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import TestPage from "@/pages/TestPage";
+import UnauthorizedPage from "@/pages/UnauthorizedPage";
+import GamesPage from "@/pages/GamePage";
 
 const AppRoutes = () => {
   return (
@@ -23,10 +25,28 @@ const AppRoutes = () => {
         }
       />
       <Route
+        path="/games"
+        element={
+          <MainLayout>
+            <GamesPage />
+          </MainLayout>
+        }
+      />
+      <Route
         path="/test"
         element={
           <MainLayout>
             <TestPage />
+          </MainLayout>
+        }
+      />
+
+      {/* Unauthorized */}
+      <Route
+        path="/unauthorized"
+        element={
+          <MainLayout>
+            <UnauthorizedPage />
           </MainLayout>
         }
       />

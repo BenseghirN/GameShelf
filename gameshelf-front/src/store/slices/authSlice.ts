@@ -18,7 +18,7 @@ export const loadCurrentUser = createAsyncThunk(
   "auth/loadCurrentUser",
   async (): Promise<User | null> => {
     return await fetchData<User>(
-      `${import.meta.env.VITE_API_BASE_URL}/Auth/user-info`
+      `${import.meta.env.VITE_API_BASE_URL}/api/v1/Auth/user-info`
     );
   }
 );

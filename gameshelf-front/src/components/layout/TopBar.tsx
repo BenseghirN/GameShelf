@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import Logo from "@/assets/GameShelf.svg";
 import { useNavigate } from "react-router-dom";
 
-export default function TopBar({ user }: { user: UserViewModel }) {
+export default function TopBar({ user }: { user: UserViewModel | null }) {
   const MotionButton = motion(Button);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function TopBar({ user }: { user: UserViewModel }) {
   const handleLogout = () => {
     window.location.href = `${
       import.meta.env.VITE_API_BASE_URL
-    }/Auth/logout?returnUrl=/`;
+    }/api/v1/Auth/logout?returnUrl=/`;
     dispatch(logout());
   };
 
