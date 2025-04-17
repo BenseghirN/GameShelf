@@ -2,6 +2,8 @@ using GameShelf.API.Configuration;
 using GameShelf.Infrastructure.Configuration;
 using GameShelf.Application.Configuration;
 using System.Text.Json.Serialization;
+using GameShelf.API.DataSeeding;
+using GameShelf.Application.Interfaces;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +25,13 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
 WebApplication app = builder.Build();
+
+// This is a synchronous call to ensure the database is seeded before the application starts
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<IGameShelfDbContext>();
+    await SeedData.SeedDatabase(context);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

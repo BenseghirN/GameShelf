@@ -32,6 +32,17 @@ namespace GameShelf.Application.Services
             await dbContext.SaveChangesAsync(cancellationToken);
         }
 
+        public async Task<StatsDto> GetLibraryStatsAsync(CancellationToken cancellationToken = default)
+        {
+            User? user = await GetUserAsync(cancellationToken);
+            return new StatsDto
+            {
+                NbTotalGames = user.UserGames.Count,
+                NbOngoingGames = user.UserGames.Count(ug => ug.Statut == GameStatus.EnCours)
+            };
+
+        }
+
         public async Task<UserGameDto> UpdateGameStatusAsync(Guid gameId, GameStatus statut, int? note, CancellationToken cancellationToken = default)
         {
             User? user = await GetUserAsync(cancellationToken);

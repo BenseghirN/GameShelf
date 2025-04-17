@@ -80,5 +80,23 @@ namespace GameShelf.API.Controllers
             await libraryService.RemoveGameFromLibraryAsync(gameId, cancellationToken);
             return NoContent();
         }
+
+        /// <summary>
+        /// Récupère des statistiques sur la bibliothèque de l'utilisateur connecté.
+        /// </summary>
+        /// <remarks>
+        /// Ce point retourne le nombre total de jeux ainsi que le nombre de jeux en cours pour l'utilisateur connecté.
+        /// </remarks>
+        /// <returns>Un objet contenant le nombre total de jeux et le nombre de jeux en cours.</returns>
+        /// <response code="200">Statistiques retournées avec succès</response>
+        /// <response code="401">Utilisateur non authentifié</response>
+        [HttpGet("stats")]
+        [ProducesResponseType(typeof(StatsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetLibraryStats(CancellationToken cancellationToken)
+        {
+            var stats = await libraryService.GetLibraryStatsAsync(cancellationToken);
+            return Ok(stats);
+        }
     }
 }

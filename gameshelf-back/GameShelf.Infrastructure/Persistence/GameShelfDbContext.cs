@@ -32,6 +32,13 @@ public class GameShelfDbContext : DbContext, IGameShelfDbContext
             }
         }
 
+        modelBuilder.Entity<Game>()
+            .Property(g => g.DateSortie)
+            .HasConversion(
+                v => v.HasValue ? v.Value.ToUniversalTime() : (DateTime?)null,
+                v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : (DateTime?)null
+            );
+
         // PK composées pour les entités de jointure
         modelBuilder.Entity<GameTag>()
             .HasKey(gt => new { gt.GameId, gt.TagId });
