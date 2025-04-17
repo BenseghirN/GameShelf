@@ -5,6 +5,7 @@ import LoginPage from "@/pages/LoginPage";
 import TestPage from "@/pages/TestPage";
 import UnauthorizedPage from "@/pages/UnauthorizedPage";
 import GamesPage from "@/pages/GamePage";
+import LibraryPage from "@/pages/LibraryPage";
 
 const AppRoutes = () => {
   return (
@@ -29,6 +30,14 @@ const AppRoutes = () => {
         element={
           <MainLayout>
             <GamesPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/library"
+        element={
+          <MainLayout>
+            <LibraryPage />
           </MainLayout>
         }
       />

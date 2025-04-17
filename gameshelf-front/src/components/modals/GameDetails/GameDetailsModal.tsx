@@ -67,11 +67,6 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
             {/* Plateformes */}
             <Stack direction="row" spacing={1} mb={2}>
               {game.platforms.map((p) => (
-                // <Avatar
-                //   key={p.id}
-                //   alt={p.nom}
-                //   src={getPlatformFullImageUrl(p.imagePath)}
-                // />
                 <Box
                   key={p.id}
                   component="img"
@@ -81,7 +76,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
                     height: 32,
                     width: 40,
                     objectFit: "contain",
-                    borderRadius: 1, // ou 0 si tu veux strictement carré
+                    borderRadius: 1,
                   }}
                 />
               ))}
