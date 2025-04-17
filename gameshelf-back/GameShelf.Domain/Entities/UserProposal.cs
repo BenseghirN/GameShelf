@@ -6,7 +6,6 @@ namespace GameShelf.Domain.Entities
     {
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
-        public User User { get; set; } = default!;
 
         public string Titre { get; set; } = string.Empty;
         public Guid PlatformId { get; set; }
@@ -23,6 +22,12 @@ namespace GameShelf.Domain.Entities
         public void SetWaiting()
         {
             Statut = ProposalStatus.EnAttente;
+        }
+
+        public void UpdateInfo(string titre, Guid platformId)
+        {
+            Titre = titre;
+            PlatformId = platformId;
         }
     }
 }

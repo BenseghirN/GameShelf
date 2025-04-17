@@ -11,7 +11,7 @@ namespace GameShelf.Application.Services
         public async Task<TagDto> CreateAsync(TagDto dto, CancellationToken cancellationToken = default)
         {
             Tag tag = mapper.Map<Tag>(dto);
-            dbContext.Tags.Add(tag);
+            await dbContext.Tags.AddAsync(tag);
             await dbContext.SaveChangesAsync(cancellationToken);
             return mapper.Map<TagDto>(tag);
         }

@@ -14,7 +14,7 @@ namespace GameShelf.Application.Services
             game.Id = Guid.NewGuid();
 
             // TODO: ADD METHOD INTO GAME ENTITY TO CREATE GAME
-            dbContext.Games.Add(game);
+            await dbContext.Games.AddAsync(game);
             await dbContext.SaveChangesAsync(cancellationToken);
 
             return mapper.Map<GameDto>(game);

@@ -14,7 +14,6 @@ namespace GameShelf.Application.Services
             User? user = await GetUserAsync(cancellationToken);
             user.AddGame(gameId, statut, note);
             UserGame userGame = user.UserGames.First(ug => ug.GameId == gameId);
-            // userGame.ImagePersoPath = imagePersoPath;
             await dbContext.SaveChangesAsync(cancellationToken);
             return mapper.Map<UserGameDto>(userGame);
         }

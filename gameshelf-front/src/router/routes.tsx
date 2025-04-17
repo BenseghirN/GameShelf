@@ -6,6 +6,8 @@ import TestPage from "@/pages/TestPage";
 import UnauthorizedPage from "@/pages/UnauthorizedPage";
 import GamesPage from "@/pages/GamePage";
 import LibraryPage from "@/pages/LibraryPage";
+import NewProposalPage from "@/pages/NewProposalPage";
+import NotFoundPage from "@/pages/NotFoundPage";
 
 const AppRoutes = () => {
   return (
@@ -50,6 +52,25 @@ const AppRoutes = () => {
         }
       />
 
+      {/* Proposition des utilisateurs */}
+      <Route
+        path="/proposal"
+        element={
+          <MainLayout>
+            <NewProposalPage />
+          </MainLayout>
+        }
+      />
+
+      <Route
+        path="/proposal/:id"
+        element={
+          <MainLayout>
+            <NewProposalPage />
+          </MainLayout>
+        }
+      />
+
       {/* Unauthorized */}
       <Route
         path="/unauthorized"
@@ -60,9 +81,15 @@ const AppRoutes = () => {
         }
       />
 
-      {/* <Route path="/" element={<LoginPage />} />
-      <Route path="/home" element={<HomePage />} />
-      <Route path="/test" element={<TestPage />} /> */}
+      {/* Page 404 */}
+      <Route
+        path="*"
+        element={
+          <MainLayout>
+            <NotFoundPage />
+          </MainLayout>
+        }
+      />
     </Routes>
   );
 };

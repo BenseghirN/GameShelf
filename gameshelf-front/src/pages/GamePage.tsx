@@ -15,9 +15,13 @@ import { useUserGame } from "@/hooks/useUserGame";
 import { fetchData } from "@/utils/fetchData";
 import GameDetailsModal from "@/components/modals/GameDetails/GameDetailsModal";
 import { AddToLibraryDto } from "@/types/AddToLibraryDto";
+import FancyButton from "@/components/controls/FancyButton";
+import SendIcon from "@mui/icons-material/Send";
+import { useNavigate } from "react-router-dom";
 
 export default function GamesPage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { games, loading, error } = useAppSelector((state) => state.games);
   const [search, setSearch] = useState("");
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
@@ -36,9 +40,10 @@ export default function GamesPage() {
     dispatch(loadAllGames());
   }, [dispatch]);
 
-  const filteredGames = games.filter((game) =>
-    game.titre.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredGames =
+    games.filter((game) =>
+      game.titre.toLowerCase().includes(search.toLowerCase())
+    ) || [];
 
   const {
     userGame,
@@ -107,9 +112,39 @@ export default function GamesPage() {
   };
 
   return (
-    <Box px={2} py={4}>
+    <Box
+      px={2}
+      py={4}
+      sx={{
+        minHeight: "calc(100vh - 64px)",
+        width: "100%",
+        maxWidth: "1200px",
+        mx: "auto",
+      }}
+    >
+      <Box
+        width="100%"
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        px={4}
+        mb={3}
+      >
+        <Typography variant="h5" fontWeight="bold">
+          Tous les jeux
+        </Typography>
+
+        <FancyButton
+          color="#7c3aed"
+          icon={<SendIcon />}
+          onClick={() => navigate("/proposer")}
+        >
+          Proposer un jeu
+        </FancyButton>
+      </Box>
+
       {/* Champ de recherche pour filtrer les jeux */}
-      <Box maxWidth="600px" mx="auto" mb={4}>
+      <Box maxWidth="300px" mx="auto" mb={4}>
         <TextField
           fullWidth
           label="Rechercher un jeu"
@@ -121,13 +156,44 @@ export default function GamesPage() {
         />
       </Box>
 
-      {loading && <CircularProgress />}
-      {error && <Alert severity="error">{error}</Alert>}
+      {loading && (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      )}
+
+      {error && (
+        <Box display="flex" justifyContent="center" mt={3}>
+          <Alert
+            severity="error"
+            sx={{
+              maxWidth: 400,
+              width: "100%",
+              alignItems: "center", // force l'alignement vertical au centre
+              whiteSpace: "nowrap", // empêche les retours à la ligne intempestifs
+            }}
+          >
+            {error}
+          </Alert>
+        </Box>
+      )}
 
       {!loading && !error && (
         <>
           {filteredGames.length === 0 ? (
-            <Typography>Aucun jeu trouvé.</Typography>
+            <Box display="flex" justifyContent="center" mt={3}>
+              <Alert
+                severity="warning"
+                sx={{
+                  maxWidth: 400,
+                  width: "100%",
+                  alignItems: "center",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Aucun jeu trouvé.
+              </Alert>
+            </Box>
           ) : (
             <Box
               display="grid"

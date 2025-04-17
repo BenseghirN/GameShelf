@@ -19,6 +19,9 @@ namespace GameShelf.Application.DTOs
         /// <summary>Identifiant de la plateforme sélectionnée pour le jeu.</summary>
         public Guid PlatformId { get; set; }
 
+        /// <summary>Plateforme sélectionnée pour le jeu.</summary>
+        public PlatformDto? Platform { get; set; } = null;
+
         /// <summary>Chemin de l'image associée à la proposition.</summary>
         public string ImagePath { get; set; } = string.Empty;
 
