@@ -98,5 +98,24 @@ namespace GameShelf.API.Controllers
             var stats = await libraryService.GetLibraryStatsAsync(cancellationToken);
             return Ok(stats);
         }
+
+        /// <summary>
+        /// Vérifie si le jeu spécifié est présent dans la bibliothèque de l'utilisateur connecté et le renvoie.
+        /// </summary>
+        /// <param name="gameId">Identifiant du jeu à vérifier.</param>
+        /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>True si le jeu est présent, sinon false.</returns>
+        [HttpGet("game/{gameId}")]
+        [ProducesResponseType(typeof(UserGameDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public async Task<IActionResult> GetUserGameByGameId(Guid gameId, CancellationToken cancellationToken)
+        {
+            UserGameDto? userGameDto = await libraryService.GetUserGameByGameIdAsync(gameId, cancellationToken);
+
+            if (userGameDto == null)
+                return NotFound();
+            return Ok(userGameDto);
+        }
     }
 }

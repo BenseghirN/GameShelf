@@ -14,7 +14,9 @@ export default function HomePage() {
     const fetchStats = async () => {
       try {
         setLoading(true);
-        const result = await fetchData<GameStats>("/library/stats");
+        const result = await fetchData<GameStats>(
+          `${import.meta.env.VITE_API_BASE_URL}/api/v1/library/stats`
+        );
         if (result) {
           setStats(result);
         } else {
@@ -65,8 +67,7 @@ export default function HomePage() {
       </motion.div>
 
       {loading && <CircularProgress />}
-
-      {error && <Alert severity="error">{error}</Alert>}
+      {error && <Alert severity="warning">{error}</Alert>}
 
       {!loading && stats && !error && (
         <motion.div

@@ -1,5 +1,5 @@
 export interface AddToLibraryDto {
-  statut: "Possédé";
-  note: number;
-  imagePersoPath: string;
+  statut: "Possede" | "EnCours" | "Termine" | null;
+  note: number | null;
+  imagePersoPath: string | null;
 }

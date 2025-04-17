@@ -4,11 +4,11 @@ namespace GameShelf.Domain.Enums
 {
     public enum GameStatus
     {
-        [EnumMember(Value = "Terminé")]
-        Termine,
         [EnumMember(Value = "Possédé")]
         Possede,
-        [EnumMember(Value = "En cours")]
+        [EnumMember(Value = "En Cours")]
         EnCours,
+        [EnumMember(Value = "Terminé")]
+        Termine
     }
 }

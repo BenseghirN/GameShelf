@@ -11,5 +11,6 @@ namespace GameShelf.Application.Interfaces
         Task<UserGameDto> UpdateGameStatusAsync(Guid gameId, GameStatus statut, int? note, CancellationToken cancellationToken = default);
         Task RemoveGameFromLibraryAsync(Guid gameId, CancellationToken cancellationToken = default);
         Task<StatsDto> GetLibraryStatsAsync(CancellationToken cancellationToken = default);
+        Task<UserGameDto?> GetUserGameByGameIdAsync(Guid gameId, CancellationToken cancellationToken = default);
     }
 }

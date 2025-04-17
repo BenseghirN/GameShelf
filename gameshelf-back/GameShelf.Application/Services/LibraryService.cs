@@ -43,6 +43,15 @@ namespace GameShelf.Application.Services
 
         }
 
+        public async Task<UserGameDto?> GetUserGameByGameIdAsync(Guid gameId, CancellationToken cancellationToken = default)
+        {
+            User? user = await GetUserAsync(cancellationToken);
+            UserGame? userGame = user.UserGames.FirstOrDefault(ug => ug.GameId == gameId);
+            return userGame != null
+                ? mapper.Map<UserGameDto>(userGame)
+                : null;
+        }
+
         public async Task<UserGameDto> UpdateGameStatusAsync(Guid gameId, GameStatus statut, int? note, CancellationToken cancellationToken = default)
         {
             User? user = await GetUserAsync(cancellationToken);
