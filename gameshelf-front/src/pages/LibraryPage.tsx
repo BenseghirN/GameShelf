@@ -5,6 +5,7 @@ import {
   deleteUserGame,
   loadUserLibrary,
   selectUserGames,
+  updateUserGameLocally,
 } from "@/store/slices/librarySlice";
 import { UserGame } from "@/types/UserGame";
 import { Typography, CircularProgress, Alert, Snackbar } from "@mui/material";
@@ -108,6 +109,13 @@ export default function LibraryPage() {
           onRemoveFromLibrary={handleRemoveFromLibrary}
           loading={false}
           error={null}
+          onSave={(updatedUserGame) => {
+            dispatch(updateUserGameLocally(updatedUserGame));
+            setSelectedUserGame({
+              ...updatedUserGame,
+              game: selectedUserGame?.game ?? null,
+            });
+          }}
         />
       )}
 

@@ -59,6 +59,15 @@ const userGameSlice = createSlice({
         (ug) => ug.gameId !== action.payload
       );
     },
+    updateUserGameLocally: (state, action) => {
+      const updated = action.payload;
+      const index = state.userGames.findIndex(
+        (ug) => ug.gameId === updated.gameId
+      );
+      if (index !== -1) {
+        state.userGames[index] = updated;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -92,6 +101,9 @@ export const selectUserGames = (state: RootState) => state.library.userGames;
 export const selectUserGameByGameId = (gameId: string) => (state: RootState) =>
   state.library.userGames.find((ug) => ug.gameId === gameId);
 
-export const { resetUserLibrary, removeUserGameLocally } =
-  userGameSlice.actions;
+export const {
+  resetUserLibrary,
+  removeUserGameLocally,
+  updateUserGameLocally,
+} = userGameSlice.actions;
 export default userGameSlice.reducer;

@@ -10,4 +10,5 @@ export type GameDetailsModalProps = {
   error: string | null;
   onAddToLibrary: () => void;
   onRemoveFromLibrary: () => void;
+  onSave?: (updated: UserGame) => void;
 };

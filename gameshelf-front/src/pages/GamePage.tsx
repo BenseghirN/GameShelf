@@ -159,6 +159,7 @@ export default function GamesPage() {
           error={userGameError}
           onAddToLibrary={handleAddToLibrary}
           onRemoveFromLibrary={handleRemoveFromLibrary}
+          onSave={refreshModal}
         />
       )}
       <Snackbar

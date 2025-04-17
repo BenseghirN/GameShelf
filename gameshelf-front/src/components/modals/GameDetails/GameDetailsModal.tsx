@@ -7,12 +7,36 @@ import {
   Chip,
   DialogActions,
   Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
 import StarIcon from "@mui/icons-material/Star";
 import { getPlatformFullImageUrl } from "@/utils/imageUtils";
 import { GameDetailsModalProps } from "./GameDetailsModalProps";
+import { useState } from "react";
+import { fetchData } from "@/utils/fetchData";
+import { UpdateLibraryDto } from "@/types/UpdateLibraryDto";
+import { UserGame } from "@/types/UserGame";
+import EditIcon from "@mui/icons-material/Edit";
+
+const statutLabels: Record<string, string> = {
+  Possede: "Possédé",
+  EnCours: "En Cours",
+  Termine: "Terminé",
+};
+
+const statutColors: Record<string, "default" | "warning" | "success"> = {
+  Possede: "warning", // Jaune
+  EnCours: "default", // Gris (ou modifiable avec sx)
+  Termine: "success", // Vert
+};
 
 const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
   open,
@@ -21,7 +45,63 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
   onRemoveFromLibrary,
   game,
   userGame,
+  onSave,
 }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [statut, setStatut] = useState(userGame?.statut || "Possede");
+  const [note, setNote] = useState(userGame?.note || 0);
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
+
+  const handleSave = async () => {
+    if (!userGame) return;
+    setSaving(true);
+    try {
+      const dto: UpdateLibraryDto = {
+        statut,
+        note,
+      };
+      const url = `${import.meta.env.VITE_API_BASE_URL}/api/v1/Library/${
+        game.id
+      }`;
+      const result: UserGame | null = await fetchData<UserGame>(
+        url,
+        "PUT",
+        dto
+      );
+      if (result) {
+        setStatut(result.statut as "Possede" | "EnCours" | "Termine");
+        setNote(result.note ?? 0);
+        setToast({
+          open: true,
+          message: "Modifications enregistrées avec succès",
+          severity: "success",
+        });
+        setIsEditing(false);
+        if (onSave) onSave(result);
+      } else {
+        setToast({
+          open: true,
+          message: "Erreur lors de la sauvegarde",
+          severity: "error",
+        });
+      }
+    } catch (error) {
+      setToast({
+        open: true,
+        message: "Erreur inattendue",
+        severity: "error",
+      });
+      void error;
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle>
@@ -83,23 +163,55 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
             </Stack>
 
             {userGame && (
-              <Box>
-                <Chip
-                  label={`Statut : ${userGame.statut}`}
-                  color="success"
-                  sx={{ mb: 1 }}
-                />
-                <Typography>
-                  <StarIcon
-                    fontSize="small"
-                    sx={{ verticalAlign: "middle", mr: 0.5 }}
-                  />
-                  Note : {userGame.note}/5
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Ajouté le :{" "}
-                  {new Date(userGame.dateAjout).toLocaleDateString()}
-                </Typography>
+              <Box mt={2}>
+                {isEditing ? (
+                  <>
+                    <FormControl fullWidth margin="normal">
+                      <InputLabel>Statut</InputLabel>
+                      <Select
+                        value={statut}
+                        label="Statut"
+                        onChange={(e) =>
+                          setStatut(
+                            e.target.value as "Possede" | "EnCours" | "Termine"
+                          )
+                        }
+                      >
+                        <MenuItem value="Possede">Possédé</MenuItem>
+                        <MenuItem value="EnCours">En cours</MenuItem>
+                        <MenuItem value="Termine">Terminé</MenuItem>
+                      </Select>
+                    </FormControl>
+                    <TextField
+                      fullWidth
+                      type="number"
+                      label="Note (sur 5)"
+                      value={note}
+                      onChange={(e) => setNote(Number(e.target.value))}
+                      inputProps={{ min: 0, max: 5 }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Chip
+                      label={statutLabels[userGame.statut] ?? userGame.statut}
+                      color={statutColors[userGame.statut] ?? "default"}
+                      sx={{ mb: 1 }}
+                    />
+
+                    <Typography>
+                      <StarIcon
+                        fontSize="small"
+                        sx={{ verticalAlign: "middle", mr: 0.5 }}
+                      />
+                      Note : {userGame.note}/5
+                    </Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      Ajouté le :{" "}
+                      {new Date(userGame.dateAjout).toLocaleDateString()}
+                    </Typography>
+                  </>
+                )}
               </Box>
             )}
           </Box>
@@ -107,20 +219,57 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
       </DialogContent>
 
       <DialogActions>
-        {userGame ? (
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={onRemoveFromLibrary}
-          >
-            Supprimer de ma bibliothèque
-          </Button>
-        ) : (
+        {userGame && !isEditing && (
+          <>
+            <IconButton
+              onClick={() => setIsEditing(true)}
+              color="primary"
+              aria-label="Modifier"
+            >
+              <EditIcon />
+            </IconButton>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={onRemoveFromLibrary}
+            >
+              Supprimer de ma bibliothèque
+            </Button>
+          </>
+        )}
+
+        {!userGame && (
           <Button variant="contained" onClick={onAddToLibrary}>
             Ajouter à ma bibliothèque
           </Button>
         )}
+
+        {isEditing && (
+          <>
+            <Button onClick={() => setIsEditing(false)} disabled={saving}>
+              Annuler
+            </Button>
+            <Button variant="contained" onClick={handleSave} disabled={saving}>
+              Sauvegarder
+            </Button>
+          </>
+        )}
       </DialogActions>
+
+      <Snackbar
+        open={toast.open}
+        autoHideDuration={3000}
+        onClose={() => setToast({ ...toast, open: false })}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          severity={toast.severity}
+          onClose={() => setToast({ ...toast, open: false })}
+          sx={{ width: "100%" }}
+        >
+          {toast.message}
+        </Alert>
+      </Snackbar>
     </Dialog>
   );
 };
