@@ -5,6 +5,7 @@ import AdminIcon from "@mui/icons-material/AdminPanelSettings";
 import ChecklistRtlIcon from "@mui/icons-material/ChecklistRtl";
 import TagIcon from "@mui/icons-material/Tag";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import MonitorIcon from "@mui/icons-material/Monitor";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Collapse,
@@ -36,6 +37,7 @@ const navItems = [
 const adminNavItems = [
   { label: "Utilisateurs", path: "/admin/users", icon: <PeopleIcon /> },
   { label: "Tags / Genres", path: "/admin/tags", icon: <TagIcon /> },
+  { label: "Plateformes", path: "/admin/platforms", icon: <MonitorIcon /> },
   // Tu peux ajouter d’autres sous-liens ici
 ];
 

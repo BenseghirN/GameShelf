@@ -1,47 +1,47 @@
+import { useToast } from "@/hooks/useToas";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
-  deleteTag,
-  loadAllTags,
-  selectTags,
-} from "@/store/slices/admin/tagSlice";
+  deletePlatform,
+  loadAllPlatforms,
+  selectPlatforms,
+} from "@/store/slices/admin/platformSlice";
 import {
-  Typography,
+  Alert,
+  Box,
   Button,
   CircularProgress,
-  Alert,
   IconButton,
-  TextField,
   Snackbar,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { Box } from "@mui/system";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useToast } from "@/hooks/useToas";
 
-export default function AdminTagsListPage() {
+export default function AdminPlatformListPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const tags = useAppSelector(selectTags);
-  const { loading, error } = useAppSelector((state) => state.tags);
+  const platforms = useAppSelector(selectPlatforms);
+  const { loading, error } = useAppSelector((state) => state.platforms);
   const { toast, showToast, closeToast } = useToast();
 
   useEffect(() => {
-    dispatch(loadAllTags());
+    dispatch(loadAllPlatforms());
   }, [dispatch]);
 
   const handleEdit = (id: string) => {
-    navigate(`/admin/tags/${id}`);
+    navigate(`/admin/platforms/${id}`);
   };
 
   const handleDelete = async (id: string) => {
     try {
-      if (confirm("Voulez-vous vraiment supprimer ce tag ?")) {
-        await dispatch(deleteTag(id)).unwrap();
-        showToast("Tag supprimé avec succès", "success");
+      if (confirm("Voulez-vous vraiment supprimer cette plateforme ?")) {
+        await dispatch(deletePlatform(id)).unwrap();
+        showToast("Plateforme supprimé avec succès", "success");
       }
     } catch (err) {
       showToast("Erreur lors de la suppression", "error");
@@ -51,18 +51,15 @@ export default function AdminTagsListPage() {
 
   // Mise en place de la disposition des colonnes du Grid
   const columns: GridColDef[] = [
-    {
-      field: "nom",
-      headerName: "Nom du tag",
-      flex: 1,
-    },
+    { field: "nom", headerName: "Nom", flex: 1 },
+    { field: "imagePath", headerName: "Image Path", flex: 2 },
     {
       field: "actions",
       headerName: "Actions",
       sortable: false,
-      align: "right",
-      headerAlign: "right",
-      width: 120,
+      filterable: false,
+      align: "center",
+      headerAlign: "center",
       renderCell: (params) => (
         <>
           <IconButton onClick={() => handleEdit(params.row.id)}>
@@ -75,7 +72,6 @@ export default function AdminTagsListPage() {
       ),
     },
   ];
-
   const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
@@ -83,8 +79,8 @@ export default function AdminTagsListPage() {
 
   const [search, setSearch] = useState("");
 
-  const filteredTags = tags.filter((tag) =>
-    tag.nom.toLowerCase().includes(search.toLowerCase())
+  const filteredPlatforms = platforms.filter((platform) =>
+    platform.nom.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -99,22 +95,20 @@ export default function AdminTagsListPage() {
       }}
     >
       <Box
-        width="100%"
         display="flex"
         justifyContent="space-between"
         alignItems="center"
         mb={3}
       >
         <Typography variant="h5" fontWeight="bold">
-          Gestion des tags
+          Gestion des plateformes
         </Typography>
-
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          onClick={() => navigate("/admin/tags/new")}
+          onClick={() => navigate("/admin/platforms/new")}
         >
-          Nouveau tag
+          Nouvelle plateforme
         </Button>
       </Box>
 
@@ -139,7 +133,7 @@ export default function AdminTagsListPage() {
         </Box>
       )}
 
-      {!loading && !error && tags.length === 0 && (
+      {!loading && !error && platforms.length === 0 && (
         <Box display="flex" justifyContent="center" mt={3}>
           <Alert
             severity="warning"
@@ -149,15 +143,15 @@ export default function AdminTagsListPage() {
               textAlign: "center",
             }}
           >
-            Aucun Tag disponible.
+            Aucune Plateforme disponible.
           </Alert>
         </Box>
       )}
 
-      {!loading && tags.length > 0 && (
+      {!loading && platforms.length > 0 && (
         <Box sx={{ height: 650, width: "100%" }}>
           <TextField
-            label="Rechercher un tag"
+            label="Rechercher une plateforme"
             variant="outlined"
             size="small"
             fullWidth
@@ -166,7 +160,7 @@ export default function AdminTagsListPage() {
             sx={{ mb: 2 }}
           />
           <DataGrid
-            rows={filteredTags}
+            rows={filteredPlatforms}
             columns={columns}
             getRowId={(row) => row.id}
             paginationModel={paginationModel}
@@ -174,7 +168,7 @@ export default function AdminTagsListPage() {
             pageSizeOptions={[10]}
             disableRowSelectionOnClick
             localeText={{
-              noRowsLabel: "Aucun tag à afficher",
+              noRowsLabel: "Aucune plateforme à afficher",
             }}
           />
         </Box>

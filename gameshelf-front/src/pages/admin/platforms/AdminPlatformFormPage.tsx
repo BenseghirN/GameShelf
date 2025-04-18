@@ -1,24 +1,24 @@
 import { useToast } from "@/hooks/useToas";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
-  addTag,
-  loadAllTags,
-  selectTagById,
-  updateTag,
-} from "@/store/slices/admin/tagSlice";
+  addPlatform,
+  loadAllPlatforms,
+  selectPlatformById,
+  updatePlatform,
+} from "@/store/slices/admin/platformSlice";
 import {
-  Typography,
   Alert,
-  TextField,
   Button,
   CircularProgress,
   Snackbar,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-export default function AdminTagFormPage() {
+export default function AdminPlatformFormPage() {
   const { id } = useParams();
   const isCreate = id === "new";
 
@@ -26,28 +26,31 @@ export default function AdminTagFormPage() {
   const navigate = useNavigate();
   const { toast, showToast, closeToast } = useToast();
 
-  const existingTag = useAppSelector(selectTagById(id!));
+  const existingPlatform = useAppSelector(selectPlatformById(id!));
   const [nom, setNom] = useState("");
+  const [imagePath, setImagePath] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(!isCreate);
 
   useEffect(() => {
     if (!isCreate) {
-      dispatch(loadAllTags());
+      dispatch(loadAllPlatforms());
     }
   }, [dispatch, isCreate]);
 
   useEffect(() => {
-    if (!isCreate && existingTag) {
-      setNom(existingTag.nom);
+    if (!isCreate && existingPlatform) {
+      setNom(existingPlatform.nom);
+      setImagePath(existingPlatform.imagePath || "");
       setLoading(false);
     }
-  }, [isCreate, existingTag]);
+  }, [isCreate, existingPlatform]);
 
-  const handleSave = async () => {
+  const handleSave = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (!nom.trim()) {
-      setError("Le nom du tag est requis.");
+      setError("Le nom de la plateforme est requis.");
       return;
     }
 
@@ -56,13 +59,15 @@ export default function AdminTagFormPage() {
 
     try {
       if (isCreate) {
-        await dispatch(addTag({ nom })).unwrap();
-        showToast("Tag créé avec succès", "success");
+        await dispatch(
+          addPlatform({ nom: nom, imagePath: imagePath.trim() || null })
+        ).unwrap();
+        showToast("Plateforme créée avec succès", "success");
       } else {
-        await dispatch(updateTag({ id: id!, nom })).unwrap();
-        showToast("Tag mis à jour avec succès", "success");
+        await dispatch(updatePlatform({ id: id!, nom, imagePath })).unwrap();
+        showToast("Plateforme mise à jour avec succès", "success");
       }
-      setTimeout(() => navigate("/admin/tags"), 1000);
+      setTimeout(() => navigate("/admin/platforms"), 1000);
     } catch (err) {
       setError("Erreur lors de la sauvegarde.");
       if (error) {
@@ -94,7 +99,7 @@ export default function AdminTagFormPage() {
       }}
     >
       <Typography variant="h5" fontWeight="bold" mb={3}>
-        {isCreate ? "Créer un nouveau tag" : "Modifier le tag"}
+        {isCreate ? "Créer une nouvelle plateforme" : "Modifier la plateforme"}
       </Typography>
 
       {error && (
@@ -112,29 +117,38 @@ export default function AdminTagFormPage() {
           </Alert>
         </Box>
       )}
-
-      <TextField
-        fullWidth
-        label="Nom du tag"
-        value={nom}
-        onChange={(e) => setNom(e.target.value)}
-        disabled={saving}
-        sx={{ mb: 3 }}
-        required
-      />
-
-      <Box display="flex" justifyContent="flex-end" gap={2}>
-        <Button
-          variant="outlined"
-          onClick={() => navigate("/admin/tags")}
+      <form onSubmit={handleSave}>
+        <TextField
+          fullWidth
+          label="Nom de la plateforme"
+          value={nom}
+          onChange={(e) => setNom(e.target.value)}
           disabled={saving}
-        >
-          Annuler
-        </Button>
-        <Button variant="contained" onClick={handleSave} disabled={saving}>
-          Sauvegarder
-        </Button>
-      </Box>
+          sx={{ mb: 3 }}
+          required
+        />
+
+        <TextField
+          fullWidth
+          label="Lien de l'image"
+          value={imagePath}
+          onChange={(e) => setImagePath(e.target.value)}
+          disabled={saving}
+          sx={{ mb: 3 }}
+        />
+        <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Button
+            variant="outlined"
+            onClick={() => navigate("/admin/platforms")}
+            disabled={saving}
+          >
+            Annuler
+          </Button>
+          <Button type="submit" variant="contained" disabled={saving}>
+            Sauvegarder
+          </Button>
+        </Box>
+      </form>
       <Snackbar
         open={toast.open}
         autoHideDuration={3000}

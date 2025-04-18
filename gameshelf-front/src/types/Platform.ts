@@ -1,5 +1,5 @@
 export interface Platform {
   id: string;
   nom: string;
-  imagePath: string;
+  imagePath: string | null;
 }

@@ -94,10 +94,7 @@ const userGameSlice = createSlice({
   },
 });
 
-// Selector pour récupérer tous les userGames
 export const selectUserGames = (state: RootState) => state.library.userGames;
-
-// Selector pour récupérer un UserGame par gameId
 export const selectUserGameByGameId = (gameId: string) => (state: RootState) =>
   state.library.userGames.find((ug) => ug.gameId === gameId);
 

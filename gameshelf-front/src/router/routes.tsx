@@ -11,6 +11,8 @@ import MyProposalPage from "@/pages/ProposalPage";
 import AdminRoute from "@/utils/AdminRoute";
 import AdminTagsListPage from "@/pages/admin/tags/AdminTagListPage";
 import AdminTagFormPage from "@/pages/admin/tags/AdminTagFormPage";
+import AdminPlatformListPage from "@/pages/admin/platforms/AdminPlatformListPage";
+import AdminPlatformFormPage from "@/pages/admin/platforms/AdminPlatformFormPage";
 
 const AppRoutes = () => {
   return (
@@ -55,8 +57,26 @@ const AppRoutes = () => {
           </MainLayout>
         }
       />
+      <Route
+        path="/proposal"
+        element={
+          <MainLayout>
+            <NewProposalFormPage />
+          </MainLayout>
+        }
+      />
+
+      <Route
+        path="/proposal/:id"
+        element={
+          <MainLayout>
+            <NewProposalFormPage />
+          </MainLayout>
+        }
+      />
 
       {/* Admin Section */}
+      {/* Tags */}
       <Route
         path="/admin/tags"
         element={
@@ -77,22 +97,24 @@ const AppRoutes = () => {
           </MainLayout>
         }
       />
-
-      {/* Proposition des utilisateurs */}
+      {/* Platforms */}
       <Route
-        path="/proposal"
+        path="/admin/platforms"
         element={
           <MainLayout>
-            <NewProposalFormPage />
+            <AdminRoute>
+              <AdminPlatformListPage />
+            </AdminRoute>
           </MainLayout>
         }
       />
-
       <Route
-        path="/proposal/:id"
+        path="/admin/platforms/:id"
         element={
           <MainLayout>
-            <NewProposalFormPage />
+            <AdminRoute>
+              <AdminPlatformFormPage />
+            </AdminRoute>
           </MainLayout>
         }
       />
