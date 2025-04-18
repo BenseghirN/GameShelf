@@ -43,7 +43,7 @@ namespace GameShelf.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Create(TagDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] NewTagDto dto, CancellationToken cancellationToken)
         {
             TagDto tag = await tagService.CreateAsync(dto, cancellationToken);
             return CreatedAtAction(nameof(GetAll), new { id = tag.Id }, tag);
@@ -62,7 +62,7 @@ namespace GameShelf.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Update(int id, TagDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(Guid id, [FromBody] NewTagDto dto, CancellationToken cancellationToken)
         {
             TagDto tag = await tagService.UpdateAsync(id, dto, cancellationToken);
             return Ok(tag);
@@ -78,7 +78,7 @@ namespace GameShelf.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
             await tagService.DeleteAsync(id, cancellationToken);
             return NoContent();

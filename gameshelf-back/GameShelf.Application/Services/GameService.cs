@@ -11,8 +11,6 @@ namespace GameShelf.Application.Services
         public async Task<GameDto> CreateAsync(GameDto gameDto, CancellationToken cancellationToken = default)
         {
             Game game = mapper.Map<Game>(gameDto);
-            game.Id = Guid.NewGuid();
-
             // TODO: ADD METHOD INTO GAME ENTITY TO CREATE GAME
             await dbContext.Games.AddAsync(game);
             await dbContext.SaveChangesAsync(cancellationToken);

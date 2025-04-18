@@ -8,9 +8,10 @@ namespace GameShelf.Application.Services
 {
     public class PlatformService(IGameShelfDbContext dbContext, IMapper mapper) : IPlatformService
     {
-        public async Task<PlatformDto> CreateAsync(PlatformDto dto, CancellationToken cancellationToken = default)
+        public async Task<PlatformDto> CreateAsync(NewPlatformDto dto, CancellationToken cancellationToken = default)
         {
-            Platform platform = mapper.Map<Platform>(dto);
+            Platform platform = new Platform();
+            platform.CreateNew(dto.Nom, dto.ImagePath);
             await dbContext.Platforms.AddAsync(platform, cancellationToken);
             await dbContext.SaveChangesAsync(cancellationToken);
             return mapper.Map<PlatformDto>(platform);
@@ -36,14 +37,13 @@ namespace GameShelf.Application.Services
             return platform == null ? null : mapper.Map<PlatformDto>(platform);
         }
 
-        public async Task<PlatformDto> UpdateAsync(Guid id, PlatformDto dto, CancellationToken cancellationToken = default)
+        public async Task<PlatformDto> UpdateAsync(Guid id, NewPlatformDto dto, CancellationToken cancellationToken = default)
         {
-            Platform? entity = await dbContext.Platforms.FindAsync(new object?[] { id }, cancellationToken);
-            if (entity == null) throw new KeyNotFoundException("Platform not found");
-
-            mapper.Map(dto, entity);
+            Platform? platform = await dbContext.Platforms.FindAsync(new object?[] { id }, cancellationToken);
+            if (platform == null) throw new KeyNotFoundException("Platform not found");
+            platform.Update(dto.Nom, dto.ImagePath);
             await dbContext.SaveChangesAsync(cancellationToken);
-            return mapper.Map<PlatformDto>(entity);
+            return mapper.Map<PlatformDto>(platform);
         }
     }
 }

@@ -1,5 +1,6 @@
 import GameCard from "@/components/GameCard";
 import GameDetailsModal from "@/components/modals/GameDetails/GameDetailsModal";
+import { useToast } from "@/hooks/useToas";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   deleteUserGame,
@@ -21,15 +22,7 @@ export default function LibraryPage() {
     null
   );
   const [isModalOpen, setModalOpen] = useState(false);
-  const [toast, setToast] = useState<{
-    open: boolean;
-    message: string;
-    severity: "success" | "error" | "info" | "warning";
-  }>({
-    open: false,
-    message: "",
-    severity: "info",
-  });
+  const { toast, showToast, closeToast } = useToast();
 
   useEffect(() => {
     dispatch(loadUserLibrary());
@@ -43,13 +36,6 @@ export default function LibraryPage() {
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedUserGame(null);
-  };
-
-  const showToast = (
-    message: string,
-    severity: "success" | "error" | "info" | "warning" = "info"
-  ) => {
-    setToast({ open: true, message, severity });
   };
 
   const handleRemoveFromLibrary = async () => {
@@ -118,16 +104,15 @@ export default function LibraryPage() {
           }}
         />
       )}
-
       <Snackbar
         open={toast.open}
         autoHideDuration={3000}
-        onClose={() => setToast({ ...toast, open: false })}
+        onClose={closeToast}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
-          onClose={() => setToast({ ...toast, open: false })}
           severity={toast.severity}
+          onClose={closeToast}
           sx={{ width: "100%" }}
         >
           {toast.message}

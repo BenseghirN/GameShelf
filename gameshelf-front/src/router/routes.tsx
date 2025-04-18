@@ -2,13 +2,15 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import MainLayout from "@/components/layout/MainLayout";
 import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
-import TestPage from "@/pages/TestPage";
 import UnauthorizedPage from "@/pages/UnauthorizedPage";
 import GamesPage from "@/pages/GamePage";
 import LibraryPage from "@/pages/LibraryPage";
-import NewProposalPage from "@/pages/NewProposalPage";
+import NewProposalFormPage from "@/pages/NewProposalFormPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import MyProposalPage from "@/pages/ProposalPage";
+import AdminRoute from "@/utils/AdminRoute";
+import AdminTagsListPage from "@/pages/admin/tags/AdminTagListPage";
+import AdminTagFormPage from "@/pages/admin/tags/AdminTagFormPage";
 
 const AppRoutes = () => {
   return (
@@ -53,11 +55,25 @@ const AppRoutes = () => {
           </MainLayout>
         }
       />
+
+      {/* Admin Section */}
       <Route
-        path="/test"
+        path="/admin/tags"
         element={
           <MainLayout>
-            <TestPage />
+            <AdminRoute>
+              <AdminTagsListPage />
+            </AdminRoute>
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/admin/tags/:id"
+        element={
+          <MainLayout>
+            <AdminRoute>
+              <AdminTagFormPage />
+            </AdminRoute>
           </MainLayout>
         }
       />
@@ -67,7 +83,7 @@ const AppRoutes = () => {
         path="/proposal"
         element={
           <MainLayout>
-            <NewProposalPage />
+            <NewProposalFormPage />
           </MainLayout>
         }
       />
@@ -76,7 +92,7 @@ const AppRoutes = () => {
         path="/proposal/:id"
         element={
           <MainLayout>
-            <NewProposalPage />
+            <NewProposalFormPage />
           </MainLayout>
         }
       />

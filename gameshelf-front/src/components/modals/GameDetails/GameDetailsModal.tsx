@@ -25,6 +25,7 @@ import { fetchData } from "@/utils/fetchData";
 import { UpdateLibraryDto } from "@/types/UpdateLibraryDto";
 import { UserGame } from "@/types/UserGame";
 import EditIcon from "@mui/icons-material/Edit";
+import { useToast } from "@/hooks/useToas";
 
 const statutLabels: Record<string, string> = {
   Possede: "Possédé",
@@ -51,11 +52,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
   const [statut, setStatut] = useState(userGame?.statut || "Possede");
   const [note, setNote] = useState(userGame?.note || 0);
   const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState({
-    open: false,
-    message: "",
-    severity: "success" as "success" | "error",
-  });
+  const { toast, showToast, closeToast } = useToast();
 
   const handleSave = async () => {
     if (!userGame) return;
@@ -76,26 +73,14 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
       if (result) {
         setStatut(result.statut as "Possede" | "EnCours" | "Termine");
         setNote(result.note ?? 0);
-        setToast({
-          open: true,
-          message: "Modifications enregistrées avec succès",
-          severity: "success",
-        });
+        showToast("Modifications enregistrées avec succès", "success");
         setIsEditing(false);
         if (onSave) onSave(result);
       } else {
-        setToast({
-          open: true,
-          message: "Erreur lors de la sauvegarde",
-          severity: "error",
-        });
+        showToast("Erreur lors de la sauvegarde", "error");
       }
     } catch (error) {
-      setToast({
-        open: true,
-        message: "Erreur inattendue",
-        severity: "error",
-      });
+      showToast("Erreur inattendue", "error");
       void error;
     } finally {
       setSaving(false);
@@ -259,12 +244,12 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
       <Snackbar
         open={toast.open}
         autoHideDuration={3000}
-        onClose={() => setToast({ ...toast, open: false })}
+        onClose={closeToast}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
           severity={toast.severity}
-          onClose={() => setToast({ ...toast, open: false })}
+          onClose={closeToast}
           sx={{ width: "100%" }}
         >
           {toast.message}

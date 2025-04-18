@@ -3,6 +3,7 @@ import GamesIcon from "@mui/icons-material/SportsEsports";
 import PeopleIcon from "@mui/icons-material/People";
 import AdminIcon from "@mui/icons-material/AdminPanelSettings";
 import ChecklistRtlIcon from "@mui/icons-material/ChecklistRtl";
+import TagIcon from "@mui/icons-material/Tag";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -34,6 +35,7 @@ const navItems = [
 
 const adminNavItems = [
   { label: "Utilisateurs", path: "/admin/users", icon: <PeopleIcon /> },
+  { label: "Tags / Genres", path: "/admin/tags", icon: <TagIcon /> },
   // Tu peux ajouter d’autres sous-liens ici
 ];
 

@@ -54,7 +54,12 @@ export default function MyProposalPage() {
         mx: "auto",
       }}
     >
-      <Typography variant="h5" fontWeight="bold" mb={3}>
+      <Typography
+        variant="h5"
+        fontWeight="bold"
+        mb={3}
+        sx={{ textAlign: "center" }}
+      >
         Mes propositions
       </Typography>
 
@@ -76,12 +81,18 @@ export default function MyProposalPage() {
       )}
 
       {!loading && !error && proposals.length === 0 && (
-        <Typography
-          align="center"
-          sx={{ maxWidth: 300, mx: "auto", display: "block", mt: 3 }}
-        >
-          Aucune proposition trouvée.
-        </Typography>
+        <Box display="flex" justifyContent="center" mt={3}>
+          <Alert
+            severity="warning"
+            sx={{
+              maxWidth: 400,
+              width: "100%",
+              textAlign: "center",
+            }}
+          >
+            Aucune proposition trouvée.
+          </Alert>
+        </Box>
       )}
 
       {!loading && !error && proposals.length > 0 && (

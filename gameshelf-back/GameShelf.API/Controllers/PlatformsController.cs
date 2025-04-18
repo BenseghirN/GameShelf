@@ -61,7 +61,7 @@ namespace GameShelf.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Create([FromBody] PlatformDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Create([FromBody] NewPlatformDto dto, CancellationToken cancellationToken)
         {
             PlatformDto created = await platformService.CreateAsync(dto, cancellationToken);
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
@@ -80,7 +80,7 @@ namespace GameShelf.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> Update(Guid id, [FromBody] PlatformDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Update(Guid id, [FromBody] NewPlatformDto dto, CancellationToken cancellationToken)
         {
             PlatformDto updated = await platformService.UpdateAsync(id, dto, cancellationToken);
             return Ok(updated);

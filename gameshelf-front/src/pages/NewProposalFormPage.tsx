@@ -16,6 +16,7 @@ import { Platform } from "@/types/Platform";
 import { NewProposalDto } from "@/types/NewProposalDto";
 import { fetchData } from "@/utils/fetchData";
 import { UserProposal } from "@/types/UserProposal";
+import { useToast } from "@/hooks/useToas";
 
 const proposalStatusLabels: Record<string, string> = {
   EnAttente: "En attente",
@@ -32,7 +33,7 @@ const proposalStatusColors: Record<
   Refusee: "error",
 };
 
-export default function NewProposalPage() {
+export default function NewProposalFormPage() {
   const { id } = useParams();
   const isEdit = Boolean(id);
   const navigate = useNavigate();
@@ -41,15 +42,7 @@ export default function NewProposalPage() {
   const [titre, setTitre] = useState("");
   const [platformId, setPlatformId] = useState("");
   const [platforms, setPlatforms] = useState<Platform[]>([]);
-  const [toast, setToast] = useState<{
-    open: boolean;
-    message: string;
-    severity: "success" | "error" | "info" | "warning";
-  }>({
-    open: false,
-    message: "",
-    severity: "info",
-  });
+  const { toast, showToast, closeToast } = useToast();
 
   useEffect(() => {
     const fetchPlatforms = async () => {
@@ -92,18 +85,13 @@ export default function NewProposalPage() {
     const result = await fetchData(url, method, dto);
 
     if (result) {
-      setToast({
-        open: true,
-        message: isEdit ? "Proposition mise à jour" : "Proposition envoyée",
-        severity: "success",
-      });
+      const message = isEdit
+        ? "Proposition mise à jour"
+        : "Proposition envoyée";
+      showToast(message, "success");
       setTimeout(() => navigate("/Home"), 1000);
     } else {
-      setToast({
-        open: true,
-        message: "Erreur lors de l'envoi",
-        severity: "error",
-      });
+      showToast("Erreur lors de l'envoi", "error");
     }
   };
 
@@ -179,14 +167,17 @@ export default function NewProposalPage() {
           {isEdit ? "Mettre à jour" : "Envoyer la proposition"}
         </Button>
       </form>
-
       <Snackbar
         open={toast.open}
         autoHideDuration={3000}
-        onClose={() => setToast({ ...toast, open: false })}
+        onClose={closeToast}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert severity={toast.severity} variant="filled">
+        <Alert
+          severity={toast.severity}
+          onClose={closeToast}
+          sx={{ width: "100%" }}
+        >
           {toast.message}
         </Alert>
       </Snackbar>

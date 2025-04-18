@@ -4,7 +4,7 @@ namespace GameShelf.Domain.Entities
 {
     public class User
     {
-        public Guid Id { get; set; } // locale
+        public Guid Id { get; set; }  // locale
         public string ExternalId { get; set; } = string.Empty; // Azure ID
         public string Email { get; set; } = string.Empty;
         public string Pseudo { get; set; } = string.Empty;
@@ -28,7 +28,6 @@ namespace GameShelf.Domain.Entities
 
             return new User
             {
-                Id = Guid.NewGuid(),
                 ExternalId = externalId,
                 Email = email,
                 Pseudo = pseudo,
@@ -79,7 +78,6 @@ namespace GameShelf.Domain.Entities
             if (string.IsNullOrWhiteSpace(titre)) throw new ArgumentException("Titre invalide.");
             UserProposal newProposal = new UserProposal
             {
-                Id = Guid.NewGuid(),
                 UserId = userId,
                 PlatformId = platformId,
                 Titre = titre,

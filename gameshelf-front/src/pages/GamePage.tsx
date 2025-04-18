@@ -18,6 +18,7 @@ import { AddToLibraryDto } from "@/types/AddToLibraryDto";
 import FancyButton from "@/components/controls/FancyButton";
 import SendIcon from "@mui/icons-material/Send";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/useToas";
 
 export default function GamesPage() {
   const dispatch = useAppDispatch();
@@ -26,15 +27,7 @@ export default function GamesPage() {
   const [search, setSearch] = useState("");
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [toast, setToast] = useState<{
-    open: boolean;
-    message: string;
-    severity: "success" | "error" | "info" | "warning";
-  }>({
-    open: false,
-    message: "",
-    severity: "info",
-  });
+  const { toast, showToast, closeToast } = useToast();
 
   useEffect(() => {
     dispatch(loadAllGames());
@@ -102,13 +95,6 @@ export default function GamesPage() {
   const refreshModal = () => {
     setModalOpen(false);
     setTimeout(() => setModalOpen(true), 10);
-  };
-
-  const showToast = (
-    message: string,
-    severity: "success" | "error" | "info" | "warning" = "info"
-  ) => {
-    setToast({ open: true, message, severity });
   };
 
   return (
@@ -231,12 +217,12 @@ export default function GamesPage() {
       <Snackbar
         open={toast.open}
         autoHideDuration={3000}
-        onClose={() => setToast({ ...toast, open: false })}
+        onClose={closeToast}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
         <Alert
-          onClose={() => setToast({ ...toast, open: false })}
           severity={toast.severity}
+          onClose={closeToast}
           sx={{ width: "100%" }}
         >
           {toast.message}

@@ -20,9 +20,7 @@ export const loadAllGames = createAsyncThunk<Game[]>(
     const response = await fetchData<Game[]>(
       `${import.meta.env.VITE_API_BASE_URL}/api/v1/Games`
     );
-    if (!response) {
-      return rejectWithValue("Erreur lors du chargement des jeux");
-    }
+    if (!response) return rejectWithValue("Erreur lors du chargement des jeux");
     return response;
   }
 );
