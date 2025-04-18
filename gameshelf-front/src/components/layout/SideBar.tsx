@@ -3,7 +3,7 @@ import GamesIcon from "@mui/icons-material/SportsEsports";
 import PeopleIcon from "@mui/icons-material/People";
 import AdminIcon from "@mui/icons-material/AdminPanelSettings";
 import ChecklistRtlIcon from "@mui/icons-material/ChecklistRtl";
-import BugReportIcon from "@mui/icons-material/BugReport";
+import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   Collapse,
@@ -25,7 +25,11 @@ const navItems = [
   { label: "Home", path: "/home", icon: <HomeIcon /> },
   { label: "Tous les jeux", path: "/games", icon: <GamesIcon /> },
   { label: "Ma collection", path: "/library", icon: <ChecklistRtlIcon /> },
-  { label: "Test", path: "/test", icon: <BugReportIcon /> },
+  {
+    label: "Mes propositions",
+    path: "/my_proposals",
+    icon: <FormatListBulletedIcon />,
+  },
 ];
 
 const adminNavItems = [

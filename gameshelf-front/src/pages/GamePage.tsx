@@ -137,7 +137,7 @@ export default function GamesPage() {
         <FancyButton
           color="#7c3aed"
           icon={<SendIcon />}
-          onClick={() => navigate("/proposer")}
+          onClick={() => navigate("/proposal")}
         >
           Proposer un jeu
         </FancyButton>
@@ -169,8 +169,8 @@ export default function GamesPage() {
             sx={{
               maxWidth: 400,
               width: "100%",
-              alignItems: "center", // force l'alignement vertical au centre
-              whiteSpace: "nowrap", // empêche les retours à la ligne intempestifs
+              alignItems: "center",
+              whiteSpace: "nowrap",
             }}
           >
             {error}

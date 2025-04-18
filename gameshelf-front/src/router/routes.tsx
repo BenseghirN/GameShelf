@@ -8,6 +8,7 @@ import GamesPage from "@/pages/GamePage";
 import LibraryPage from "@/pages/LibraryPage";
 import NewProposalPage from "@/pages/NewProposalPage";
 import NotFoundPage from "@/pages/NotFoundPage";
+import MyProposalPage from "@/pages/ProposalPage";
 
 const AppRoutes = () => {
   return (
@@ -19,6 +20,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<LoginPage />} />
 
       {/* Pages avec layout */}
+      {/* Left Nav */}
       <Route
         path="/home"
         element={
@@ -40,6 +42,14 @@ const AppRoutes = () => {
         element={
           <MainLayout>
             <LibraryPage />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/my_proposals"
+        element={
+          <MainLayout>
+            <MyProposalPage />
           </MainLayout>
         }
       />
