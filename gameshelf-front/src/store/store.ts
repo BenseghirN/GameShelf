@@ -4,6 +4,7 @@ import gameReducer from "./slices/gameSlice";
 import libraryReducer from "./slices/librarySlice";
 import tagReducer from "./slices/admin/tagSlice";
 import platformReducer from "./slices/admin/platformSlice";
+import adminGameReducer from "./slices/admin/gameSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     library: libraryReducer,
     tags: tagReducer,
     platforms: platformReducer,
+    adminGames: adminGameReducer,
   },
 });
 

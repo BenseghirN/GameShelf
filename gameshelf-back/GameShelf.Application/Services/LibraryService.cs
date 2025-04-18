@@ -33,13 +33,18 @@ namespace GameShelf.Application.Services
 
         public async Task<StatsDto> GetLibraryStatsAsync(CancellationToken cancellationToken = default)
         {
-            User? user = await GetUserAsync(cancellationToken);
-            return new StatsDto
-            {
-                NbTotalGames = user.UserGames.Count,
-                NbOngoingGames = user.UserGames.Count(ug => ug.Statut == GameStatus.EnCours)
-            };
+            User? currentUser = await userSynchronizationService.EnsureUserExistsAsync() ?? throw new UnauthorizedAccessException();
+            StatsDto stats = await dbContext.UserGames
+                .Where(ug => ug.UserId == currentUser.Id)
+                .GroupBy(_ => 1)
+                .Select(g => new StatsDto
+                {
+                    NbTotalGames = g.Count(),
+                    NbOngoingGames = g.Count(ug => ug.Statut == GameStatus.EnCours)
+                })
+                .FirstOrDefaultAsync(cancellationToken) ?? new StatsDto();
 
+            return stats;
         }
 
         public async Task<UserGameDto?> GetUserGameByGameIdAsync(Guid gameId, CancellationToken cancellationToken = default)

@@ -6,8 +6,8 @@ namespace GameShelf.Application.Interfaces
     {
         Task<List<GameDto>> GetAllAsync(CancellationToken cancellationToken = default);
         Task<GameDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-        Task<GameDto> CreateAsync(GameDto gameDto, CancellationToken cancellationToken = default);
-        Task<GameDto> UpdateAsync(Guid id, GameDto gameDto, CancellationToken cancellationToken = default);
+        Task<GameDto> CreateAsync(NewGameDto gameDto, CancellationToken cancellationToken = default);
+        Task<GameDto> UpdateAsync(Guid id, NewGameDto gameDto, CancellationToken cancellationToken = default);
         Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
     }
 }

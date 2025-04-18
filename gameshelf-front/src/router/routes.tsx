@@ -13,6 +13,8 @@ import AdminTagsListPage from "@/pages/admin/tags/AdminTagListPage";
 import AdminTagFormPage from "@/pages/admin/tags/AdminTagFormPage";
 import AdminPlatformListPage from "@/pages/admin/platforms/AdminPlatformListPage";
 import AdminPlatformFormPage from "@/pages/admin/platforms/AdminPlatformFormPage";
+import AdminGameListPage from "@/pages/admin/games/AdminGameListPage";
+import AdminGameFormPage from "@/pages/admin/games/AdminGameFormPage";
 
 const AppRoutes = () => {
   return (
@@ -114,6 +116,27 @@ const AppRoutes = () => {
           <MainLayout>
             <AdminRoute>
               <AdminPlatformFormPage />
+            </AdminRoute>
+          </MainLayout>
+        }
+      />
+      {/* Games */}
+      <Route
+        path="/admin/games"
+        element={
+          <MainLayout>
+            <AdminRoute>
+              <AdminGameListPage />
+            </AdminRoute>
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/admin/games/:id"
+        element={
+          <MainLayout>
+            <AdminRoute>
+              <AdminGameFormPage />
             </AdminRoute>
           </MainLayout>
         }

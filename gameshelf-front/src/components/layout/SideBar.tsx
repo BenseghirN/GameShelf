@@ -1,6 +1,5 @@
 import HomeIcon from "@mui/icons-material/Home";
 import GamesIcon from "@mui/icons-material/SportsEsports";
-import PeopleIcon from "@mui/icons-material/People";
 import AdminIcon from "@mui/icons-material/AdminPanelSettings";
 import ChecklistRtlIcon from "@mui/icons-material/ChecklistRtl";
 import TagIcon from "@mui/icons-material/Tag";
@@ -35,10 +34,15 @@ const navItems = [
 ];
 
 const adminNavItems = [
-  { label: "Utilisateurs", path: "/admin/users", icon: <PeopleIcon /> },
+  // { label: "Utilisateurs", path: "/admin/users", icon: <PeopleIcon /> },
   { label: "Tags / Genres", path: "/admin/tags", icon: <TagIcon /> },
   { label: "Plateformes", path: "/admin/platforms", icon: <MonitorIcon /> },
-  // Tu peux ajouter d’autres sous-liens ici
+  { label: "Jeux", path: "/admin/games", icon: <GamesIcon /> },
+  // {
+  //   label: "Propositions",
+  //   path: "/admin/proposals",
+  //   icon: <FormatListBulletedIcon />,
+  // },
 ];
 
 export default function SideBar({ user }: { user: UserViewModel | null }) {
