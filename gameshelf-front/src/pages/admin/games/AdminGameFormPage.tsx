@@ -30,6 +30,10 @@ import {
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { fr } from "date-fns/locale";
 
 export default function AdminGameFormPage() {
   const { id } = useParams();
@@ -195,15 +199,26 @@ export default function AdminGameFormPage() {
               required
             />
 
-            <TextField
-              label="Date de sortie"
-              type="date"
-              fullWidth
-              value={formData.dateSortie}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, dateSortie: e.target.value }))
-              }
-            />
+            <LocalizationProvider
+              dateAdapter={AdapterDateFns}
+              adapterLocale={fr}
+            >
+              <DatePicker
+                label="Date de sortie"
+                value={
+                  formData.dateSortie ? new Date(formData.dateSortie) : null
+                }
+                onChange={(newValue) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    dateSortie: newValue?.toISOString() ?? "",
+                  }))
+                }
+                slotProps={{
+                  textField: { fullWidth: true, variant: "outlined" },
+                }}
+              />
+            </LocalizationProvider>
           </Box>
         </Box>
 

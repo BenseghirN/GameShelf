@@ -15,6 +15,7 @@ import AdminPlatformListPage from "@/pages/admin/platforms/AdminPlatformListPage
 import AdminPlatformFormPage from "@/pages/admin/platforms/AdminPlatformFormPage";
 import AdminGameListPage from "@/pages/admin/games/AdminGameListPage";
 import AdminGameFormPage from "@/pages/admin/games/AdminGameFormPage";
+import AdminUserListPage from "@/pages/admin/users/AdminUserListPage";
 
 const AppRoutes = () => {
   return (
@@ -78,6 +79,17 @@ const AppRoutes = () => {
       />
 
       {/* Admin Section */}
+      {/* Users */}
+      <Route
+        path="/admin/users"
+        element={
+          <MainLayout>
+            <AdminRoute>
+              <AdminUserListPage />
+            </AdminRoute>
+          </MainLayout>
+        }
+      />
       {/* Tags */}
       <Route
         path="/admin/tags"

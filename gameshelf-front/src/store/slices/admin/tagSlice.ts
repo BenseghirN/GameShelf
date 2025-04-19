@@ -104,9 +104,9 @@ const tagSlice = createSlice({
   },
 });
 
-export const selectTags = (state: RootState) => state.tags.tags;
+export const selectTags = (state: RootState) => state.adminTags.tags;
 export const selectTagById = (id: string) => (state: RootState) =>
-  state.tags.tags.find((t) => t.id === id);
+  state.adminTags.tags.find((t) => t.id === id);
 
 export const { resetTags } = tagSlice.actions;
 export default tagSlice.reducer;

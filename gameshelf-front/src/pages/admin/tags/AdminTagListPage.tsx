@@ -26,7 +26,7 @@ export default function AdminTagsListPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const tags = useAppSelector(selectTags);
-  const { loading, error } = useAppSelector((state) => state.tags);
+  const { loading, error } = useAppSelector((state) => state.adminTags);
   const { toast, showToast, closeToast } = useToast();
 
   useEffect(() => {

@@ -5,15 +5,17 @@ import libraryReducer from "./slices/librarySlice";
 import tagReducer from "./slices/admin/tagSlice";
 import platformReducer from "./slices/admin/platformSlice";
 import adminGameReducer from "./slices/admin/gameSlice";
+import adminUserReducer from "./slices/admin/userSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
     games: gameReducer,
     library: libraryReducer,
-    tags: tagReducer,
-    platforms: platformReducer,
+    adminTags: tagReducer,
+    adminPlatforms: platformReducer,
     adminGames: adminGameReducer,
+    adminUsers: adminUserReducer,
   },
 });
 

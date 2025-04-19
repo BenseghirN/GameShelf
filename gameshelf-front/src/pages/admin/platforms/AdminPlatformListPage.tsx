@@ -26,7 +26,7 @@ export default function AdminPlatformListPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const platforms = useAppSelector(selectPlatforms);
-  const { loading, error } = useAppSelector((state) => state.platforms);
+  const { loading, error } = useAppSelector((state) => state.adminPlatforms);
   const { toast, showToast, closeToast } = useToast();
 
   useEffect(() => {

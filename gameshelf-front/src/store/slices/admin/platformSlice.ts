@@ -118,9 +118,10 @@ const platformSlice = createSlice({
   },
 });
 
-export const selectPlatforms = (state: RootState) => state.platforms.platforms;
+export const selectPlatforms = (state: RootState) =>
+  state.adminPlatforms.platforms;
 export const selectPlatformById = (id: string) => (state: RootState) =>
-  state.platforms.platforms.find((p) => p.id === id);
+  state.adminPlatforms.platforms.find((p) => p.id === id);
 
 export const { resetPlatforms } = platformSlice.actions;
 export default platformSlice.reducer;
