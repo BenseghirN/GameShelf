@@ -4,22 +4,59 @@ public static class BuildAndDatabaseConfigurator
 {
     public static void Run()
     {
-        var root = AppContext.BaseDirectory;
+        var root = Directory.GetCurrentDirectory();
+        try
+        {
+            Console.WriteLine("\n==========================================");
+            Console.WriteLine("  Étape : Build .NET, Docker et Migrations");
+            Console.WriteLine("==========================================\n");
 
-        var backendPath = Path.Combine(root, "gameshelf-back");
-        Console.WriteLine("🛠️ Compilation du projet .NET...");
-        RunCommand("dotnet", $"build \"{backendPath}\"");
+            var backendPath = Path.Combine(root, "gameshelf-back");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("[INFO] Compilation des projets .NET...");
+            Console.ResetColor();
+            RunCommand("dotnet", $"build \"{backendPath}\"");
 
-        var dockerComposePath = Path.Combine(root, "docker-compose.yml");
-        Console.WriteLine("\n🐳 Démarrage des containers Docker...");
-        RunCommand("docker", $"compose -f \"{dockerComposePath}\" up -d");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\n[INFO] Démarrage des containers Docker...");
+            Console.ResetColor();
+            RunDockerDirect("docker", "compose up -d");
 
-        Console.WriteLine("\n🗃️ Application des migrations EF Core...");
-        RunCommand("dotnet", "ef database update " +
-                              "--project gameshelf-back/GameShelf.Infrastructure " +
-                              "--startup-project gameshelf-back/GameShelf.API");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\n[INFO] Application des migrations EF Core...");
+            Console.ResetColor();
+            RunCommand("dotnet", "ef database update " +
+                                 "--project gameshelf-back/GameShelf.Infrastructure " +
+                                 "--startup-project gameshelf-back/GameShelf.API");
 
-        Console.WriteLine("\n✅ Build, containers et migrations terminés !");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\n[OK] Build, Docker et migrations terminés !");
+            Console.ResetColor();
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("[ERREUR] Une erreur est survenue pendant le setup backend.");
+            Console.WriteLine(ex.Message);
+            Console.ResetColor();
+        }
+    }
+
+    private static void RunDockerDirect(string command, string args)
+    {
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/c {command} {args}",
+                UseShellExecute = true,
+                CreateNoWindow = false
+            }
+        };
+
+        process.Start();
+        process.WaitForExit();
     }
 
     private static void RunCommand(string command, string args)
@@ -28,26 +65,45 @@ public static class BuildAndDatabaseConfigurator
         {
             StartInfo = new ProcessStartInfo
             {
-                FileName = command,
-                Arguments = args,
+                FileName = "cmd.exe",
+                Arguments = $"/c {command} {args}",
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
-                CreateNoWindow = true
+                CreateNoWindow = false
             }
         };
 
-        process.Start();
-
-        string output = process.StandardOutput.ReadToEnd();
-        string error = process.StandardError.ReadToEnd();
-        process.WaitForExit();
-
-        Console.WriteLine(output);
-        if (!string.IsNullOrWhiteSpace(error))
+        try
         {
-            Console.WriteLine("⚠️ Erreur pendant l'exécution de la commande :");
-            Console.WriteLine(error);
+            process.Start();
+            while (!process.StandardOutput.EndOfStream)
+            {
+                var line = process.StandardOutput.ReadLine();
+                Console.WriteLine(line);
+            }
+            while (!process.StandardError.EndOfStream)
+            {
+                var errLine = process.StandardError.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(errLine);
+                Console.ResetColor();
+            }
+            process.WaitForExit();
+
+            if (process.ExitCode != 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"[ERREUR] La commande a échoué : {command} {args}");
+                Console.ResetColor();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine($"[ERREUR] Impossible d'exécuter : {command} {args}");
+            Console.WriteLine(ex.Message);
+            Console.ResetColor();
         }
     }
 }
