@@ -27,7 +27,7 @@ public static class FrontendBuilder
         RunCommand("npm", "install", frontPath);
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("[INFO] Lancement du build frontend...");
+        Console.WriteLine("[INFO] Lancement du build frontend (peut prendre du temps)...");
         Console.ResetColor();
         RunCommand("npm", "run build", frontPath);
 

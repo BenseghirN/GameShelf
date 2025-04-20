@@ -20,7 +20,7 @@ public static class BuildAndDatabaseConfigurator
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n[INFO] Démarrage des containers Docker...");
             Console.ResetColor();
-            RunCommand("docker", "compose up -d");
+            RunDockerDirect("docker", "compose up -d");
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n[INFO] Application des migrations EF Core...");
@@ -42,6 +42,23 @@ public static class BuildAndDatabaseConfigurator
         }
     }
 
+    private static void RunDockerDirect(string command, string args)
+    {
+        var process = new Process
+        {
+            StartInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/c {command} {args}",
+                UseShellExecute = true,
+                CreateNoWindow = false
+            }
+        };
+
+        process.Start();
+        process.WaitForExit();
+    }
+
     private static void RunCommand(string command, string args)
     {
         var process = new Process
@@ -60,17 +77,24 @@ public static class BuildAndDatabaseConfigurator
         try
         {
             process.Start();
-            string output = process.StandardOutput.ReadToEnd();
-            string error = process.StandardError.ReadToEnd();
+            while (!process.StandardOutput.EndOfStream)
+            {
+                var line = process.StandardOutput.ReadLine();
+                Console.WriteLine(line);
+            }
+            while (!process.StandardError.EndOfStream)
+            {
+                var errLine = process.StandardError.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(errLine);
+                Console.ResetColor();
+            }
             process.WaitForExit();
-
-            Console.WriteLine(output);
 
             if (process.ExitCode != 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"[ERREUR] La commande a échoué : {command} {args}");
-                Console.WriteLine(error);
                 Console.ResetColor();
             }
         }
