@@ -1,4 +1,4 @@
-# GameShelf
+# 🎮 GameShelf
 
 ## ✨ About The Project
 GameShelf est une application web complète de gestion de bibliothèque de jeux vidéo, permettant aux utilisateurs de créer, suivre et organiser leur collection de jeux. Elle inclut une authentification Azure B2C, une base de données PostgreSQL dockerisée, un backend .NET en Clean Architecture, un frontend React/Next.js/Tailwind, et un exécutable pour automatiser la mise en place de l'environnement de développement.
