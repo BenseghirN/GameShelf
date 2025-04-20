@@ -18,6 +18,10 @@ namespace GameShelf.Domain.Entities
         {
             Statut = ProposalStatus.Refusee;
         }
+        public void Validate()
+        {
+            Statut = ProposalStatus.Validee;
+        }
 
         public void SetWaiting()
         {

@@ -30,7 +30,7 @@ export default function MyProposalPage() {
     const loadProposals = async () => {
       try {
         const result = await fetchData<UserProposal[]>(
-          `${import.meta.env.VITE_API_BASE_URL}/api/v1/UserProposal/mine`
+          `${import.meta.env.VITE_API_BASE_URL}/api/v1/UserProposals/mine`
         );
         if (result) setProposals(result);
       } catch (error) {

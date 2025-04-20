@@ -15,7 +15,7 @@ namespace GameShelf.API.Controllers
     [Authorize]
     [Produces("application/json")]
     [Consumes("application/json")]
-    public class UserProposalController(IUserProposalService userProposalService) : ControllerBase
+    public class UserProposalsController(IUserProposalService userProposalService) : ControllerBase
     {
         /// <summary>
         /// Récupère toutes les propositions soumises (admin uniquement).
@@ -113,11 +113,16 @@ namespace GameShelf.API.Controllers
         }
 
         /// <summary>
-        /// Accepte une proposition utilisateur (admin uniquement).
+        /// Accepte une proposition utilisateur et crée un jeu (admin uniquement).
         /// </summary>
         /// <param name="id">Identifiant de la proposition à accepter.</param>
-        /// <param name="dto">Données complémentaires (description, tags).</param>
         /// <param name="cancellationToken">Token d'annulation.</param>
+        /// <returns>Le jeu nouvellement créé.</returns>
+        /// <response code="200">Proposition acceptée et jeu créé avec succès.</response>
+        /// <response code="400">Requête invalide (ex. : données manquantes).</response>
+        /// <response code="401">Utilisateur non authentifié.</response>
+        /// <response code="403">Utilisateur non autorisé (accès admin requis).</response>
+        /// <response code="404">Proposition introuvable.</response>
         [HttpPut("{id}/accept")]
         [Authorize(Policy = "Admin")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -125,10 +130,10 @@ namespace GameShelf.API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Accept(Guid id, [FromBody] AcceptProposalDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> Accept(Guid id, CancellationToken cancellationToken)
         {
-            await userProposalService.AcceptAsync(id, dto.Description, dto.TagIds, cancellationToken);
-            return NoContent();
+            GameDto newGame = await userProposalService.AcceptAsync(id, cancellationToken);
+            return Ok(newGame);
         }
 
         /// <summary>

@@ -18,7 +18,10 @@ import {
 import { Box, Stack } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
 import StarIcon from "@mui/icons-material/Star";
-import { getPlatformFullImageUrl } from "@/utils/imageUtils";
+import {
+  getGameFullImageUrl,
+  getPlatformFullImageUrl,
+} from "@/utils/imageUtils";
 import { GameDetailsModalProps } from "./GameDetailsModalProps";
 import { useState } from "react";
 import { fetchData } from "@/utils/fetchData";
@@ -104,7 +107,7 @@ const GameDetailsModal: React.FC<GameDetailsModalProps> = ({
           <Box flexShrink={0} width={{ xs: "100%", sm: "40%" }}>
             <Box
               component="img"
-              src={game.imagePath}
+              src={getGameFullImageUrl(game.imagePath)}
               alt={game.titre}
               sx={{ width: "100%", borderRadius: 2 }}
             />

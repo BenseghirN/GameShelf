@@ -6,6 +6,7 @@ import tagReducer from "./slices/admin/tagSlice";
 import platformReducer from "./slices/admin/platformSlice";
 import adminGameReducer from "./slices/admin/gameSlice";
 import adminUserReducer from "./slices/admin/userSlice";
+import adminUserProposalReducer from "./slices/admin/proposalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     adminPlatforms: platformReducer,
     adminGames: adminGameReducer,
     adminUsers: adminUserReducer,
+    adminProposals: adminUserProposalReducer,
   },
 });
 

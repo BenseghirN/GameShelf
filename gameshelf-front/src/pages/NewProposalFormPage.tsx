@@ -56,7 +56,7 @@ export default function NewProposalFormPage() {
     const fetchProposal = async () => {
       if (!id) return;
       const proposal = await fetchData<UserProposal>(
-        `${import.meta.env.VITE_API_BASE_URL}/api/v1/UserProposal/${id}`
+        `${import.meta.env.VITE_API_BASE_URL}/api/v1/UserProposals/${id}`
       );
       if (proposal) {
         setTitre(proposal.titre);
@@ -78,8 +78,8 @@ export default function NewProposalFormPage() {
     };
 
     const url = isEdit
-      ? `${import.meta.env.VITE_API_BASE_URL}/api/v1/UserProposal/${id}`
-      : `${import.meta.env.VITE_API_BASE_URL}/api/v1/UserProposal`;
+      ? `${import.meta.env.VITE_API_BASE_URL}/api/v1/UserProposals/${id}`
+      : `${import.meta.env.VITE_API_BASE_URL}/api/v1/UserProposals`;
 
     const method = isEdit ? "PUT" : "POST";
     const result = await fetchData(url, method, dto);

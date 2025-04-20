@@ -2,38 +2,29 @@ using AutoMapper;
 using GameShelf.Application.DTOs;
 using GameShelf.Application.Interfaces;
 using GameShelf.Domain.Entities;
-using GameShelf.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace GameShelf.Application.Services
 {
     public class UserProposalService(IGameShelfDbContext dbContext, IMapper mapper, IUserSynchronizationService userSynchronizationService) : IUserProposalService
     {
-        public async Task AcceptAsync(Guid proposalId, string description, List<Guid> tagIds, CancellationToken cancellationToken = default)
+        public async Task<GameDto> AcceptAsync(Guid proposalId, CancellationToken cancellationToken = default)
         {
             UserProposal? proposal = await dbContext.UserProposals
                 .Include(p => p.Platform)
                 .FirstOrDefaultAsync(p => p.Id == proposalId, cancellationToken);
             if (proposal == null) throw new KeyNotFoundException("Proposition introuvable");
 
-            List<Tag> tags = await dbContext.Tags
-                .Where(t => tagIds.Contains(t.Id))
-                .ToListAsync(cancellationToken);
+            Game newGame = new Game();
+            newGame.Titre = proposal.Titre;
 
-            Game game = new Game
-            {
-                Id = Guid.NewGuid(),
-                Titre = proposal.Titre,
-                ImagePath = proposal.ImagePath,
-                Description = description
-            };
+            newGame.AddPlatforms(new[] { proposal.Platform });
 
-            game.AddPlatforms(new[] { proposal.Platform });
-            game.AddTags(tags);
-
-            await dbContext.Games.AddAsync(game);
-            proposal.Statut = ProposalStatus.Validee;
+            await dbContext.Games.AddAsync(newGame, cancellationToken);
+            proposal.Validate();
             await dbContext.SaveChangesAsync(cancellationToken);
+
+            return mapper.Map<GameDto>(newGame);
         }
 
         public async Task<UserProposalDto> CreateAsync(NewProposalDto dto, CancellationToken cancellationToken = default)

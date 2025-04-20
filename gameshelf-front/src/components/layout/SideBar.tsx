@@ -39,11 +39,11 @@ const adminNavItems = [
   { label: "Tags / Genres", path: "/admin/tags", icon: <TagIcon /> },
   { label: "Plateformes", path: "/admin/platforms", icon: <MonitorIcon /> },
   { label: "Jeux", path: "/admin/games", icon: <GamesIcon /> },
-  // {
-  //   label: "Propositions",
-  //   path: "/admin/proposals",
-  //   icon: <FormatListBulletedIcon />,
-  // },
+  {
+    label: "Propositions",
+    path: "/admin/proposals",
+    icon: <FormatListBulletedIcon />,
+  },
 ];
 
 export default function SideBar({ user }: { user: UserViewModel | null }) {

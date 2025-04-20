@@ -16,6 +16,7 @@ import AdminPlatformFormPage from "@/pages/admin/platforms/AdminPlatformFormPage
 import AdminGameListPage from "@/pages/admin/games/AdminGameListPage";
 import AdminGameFormPage from "@/pages/admin/games/AdminGameFormPage";
 import AdminUserListPage from "@/pages/admin/users/AdminUserListPage";
+import AdminProposalListPage from "@/pages/admin/userProposals/AdminProposalListPage";
 
 const AppRoutes = () => {
   return (
@@ -149,6 +150,17 @@ const AppRoutes = () => {
           <MainLayout>
             <AdminRoute>
               <AdminGameFormPage />
+            </AdminRoute>
+          </MainLayout>
+        }
+      />
+      {/* UserProposals */}
+      <Route
+        path="/admin/proposals"
+        element={
+          <MainLayout>
+            <AdminRoute>
+              <AdminProposalListPage />
             </AdminRoute>
           </MainLayout>
         }
