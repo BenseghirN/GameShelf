@@ -22,12 +22,12 @@ public static class FrontendBuilder
         }
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("[INFO] Installation des dépendances npm...");
+        Console.WriteLine("[INFO] Installation des dépendances npm (peut prendre du temps) ...");
         Console.ResetColor();
         RunCommand("npm", "install", frontPath);
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("[INFO] Lancement du build frontend (peut prendre du temps)...");
+        Console.WriteLine("[INFO] Lancement du build frontend...");
         Console.ResetColor();
         RunCommand("npm", "run build", frontPath);
 

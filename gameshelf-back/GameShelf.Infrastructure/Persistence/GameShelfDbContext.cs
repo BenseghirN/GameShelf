@@ -50,6 +50,10 @@ public class GameShelfDbContext : DbContext, IGameShelfDbContext
             .HasKey(ug => new { ug.UserId, ug.GameId });
 
         modelBuilder.Entity<User>()
+            .HasIndex(u => u.ExternalId)
+            .IsUnique();
+
+        modelBuilder.Entity<User>()
             .Property(u => u.Role)
             .HasConversion<string>();
 
