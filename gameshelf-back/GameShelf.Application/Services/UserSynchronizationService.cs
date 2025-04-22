@@ -18,7 +18,7 @@ namespace GameShelf.Application.Services
             if (user != null)
                 return user;
 
-            user = User.Create(
+            user = new User().Create(
                 currentUser.ExternalId,
                 currentUser.Email,
                 currentUser.Pseudo,

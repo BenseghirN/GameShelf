@@ -17,7 +17,7 @@ namespace GameShelf.Domain.Entities
 
         public void PromoteToAdmin() => Role = UserRole.Admin;
         public void DemoteToUser() => Role = UserRole.User;
-        public static User Create(string externalId, string email, string pseudo, string givenName, string surName, UserRole role = UserRole.User)
+        public User Create(string externalId, string email, string pseudo, string givenName, string surName, UserRole role = UserRole.User)
         {
             if (string.IsNullOrWhiteSpace(pseudo)) throw new ArgumentException("Pseudo invalide.");
             if (string.IsNullOrWhiteSpace(givenName)) throw new ArgumentException("Prénom invalide.");

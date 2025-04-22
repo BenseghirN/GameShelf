@@ -174,5 +174,18 @@ namespace GameShelf.UnitTests.Services
             await act.Should().ThrowAsync<InvalidOperationException>()
                 .WithMessage("Ce jeu est déjà présent dans la collection.");
         }
+
+        [Fact]
+        public async Task GetLibraryStats_ShouldReturnCorrectCounts()
+        {
+            // Act
+            StatsDto stats = await _libraryService.GetLibraryStatsAsync();
+
+            // Assert
+            stats.Should().NotBeNull();
+            stats.NbTotalGames.Should().Be(2);
+            stats.NbOngoingGames.Should().Be(1);
+        }
+
     }
 }

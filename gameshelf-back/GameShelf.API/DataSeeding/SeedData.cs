@@ -1,6 +1,6 @@
 using GameShelf.Application.Interfaces;
 using GameShelf.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+using GameShelf.Domain.Enums;
 
 namespace GameShelf.API.DataSeeding;
 
@@ -8,51 +8,68 @@ public static class SeedData
 {
     public static async Task SeedDatabase(IGameShelfDbContext context)
     {
+        // Seed Admin User
+        if (!context.Users.Any(u => u.ExternalId == "dbe1a92d-c921-466d-957d-d1044e652f3f"))
+        {
+            User admin = new User();
+            admin.Create(
+                externalId: "dbe1a92d-c921-466d-957d-d1044e652f3f",
+                email: "gameshelfadmin@yopmail.com",
+                pseudo: "SuperAdmin",
+                givenName: "Admin",
+                surName: "User",
+                role: UserRole.Admin
+            );
+            await context.Users.AddAsync(admin);
+            await context.SaveChangesAsync();
+        }
+
         // Seed Genres
         if (!context.Tags.Any())
         {
-            var tags = new List<Tag>
-            {
-                new Tag { Nom = "Action" },
-                new Tag { Nom = "Adventure" },
-                new Tag { Nom = "Puzzle" },
-                new Tag { Nom = "Strategy" },
-                new Tag { Nom = "Simulation" },
-                new Tag { Nom = "RPG" },
-                new Tag { Nom = "JRPG" },
-                new Tag { Nom = "ARPG" },
-                new Tag { Nom = "FPS" },
-                new Tag { Nom = "RTS" },
-                new Tag { Nom = "TBS" },
-                new Tag { Nom = "Gestion" },
-                new Tag { Nom = "Horreur" },
-                new Tag { Nom = "Plateforme 2D" },
-                new Tag { Nom = "Plateforme 3D" },
-                new Tag { Nom = "Escape" },
-                new Tag { Nom = "Narratif" },
-                new Tag { Nom = "Énigmes" },
-                new Tag { Nom = "Escape virtuel" },
-                new Tag { Nom = "Sport" },
-                new Tag { Nom = "Courses" },
-                new Tag { Nom = "Battle Royale" },
-                new Tag { Nom = "MMORPG" },
-                new Tag { Nom = "Coopération" },
-                new Tag { Nom = "Horreur psychologique" },
-                new Tag { Nom = "Survival" },
-                new Tag { Nom = "Survival horror" },
-                new Tag { Nom = "Sandbox" },
-                new Tag { Nom = "Open world" },
-                new Tag { Nom = "Rythme" },
-                new Tag { Nom = "Musique" },
-                new Tag { Nom = "Éducatif" }
-            };
-            context.Tags.AddRange(tags);
+            List<Tag> tags = new List<Tag>
+                {
+                    new Tag { Nom = "Action" },
+                    new Tag { Nom = "Adventure" },
+                    new Tag { Nom = "Puzzle" },
+                    new Tag { Nom = "Strategy" },
+                    new Tag { Nom = "Simulation" },
+                    new Tag { Nom = "RPG" },
+                    new Tag { Nom = "JRPG" },
+                    new Tag { Nom = "ARPG" },
+                    new Tag { Nom = "FPS" },
+                    new Tag { Nom = "RTS" },
+                    new Tag { Nom = "TBS" },
+                    new Tag { Nom = "Gestion" },
+                    new Tag { Nom = "Horreur" },
+                    new Tag { Nom = "Plateforme 2D" },
+                    new Tag { Nom = "Plateforme 3D" },
+                    new Tag { Nom = "Escape" },
+                    new Tag { Nom = "Narratif" },
+                    new Tag { Nom = "Énigmes" },
+                    new Tag { Nom = "Escape virtuel" },
+                    new Tag { Nom = "Sport" },
+                    new Tag { Nom = "Courses" },
+                    new Tag { Nom = "Battle Royale" },
+                    new Tag { Nom = "MMORPG" },
+                    new Tag { Nom = "Coopération" },
+                    new Tag { Nom = "Horreur psychologique" },
+                    new Tag { Nom = "Survival" },
+                    new Tag { Nom = "Survival horror" },
+                    new Tag { Nom = "Sandbox" },
+                    new Tag { Nom = "Open world" },
+                    new Tag { Nom = "Rythme" },
+                    new Tag { Nom = "Musique" },
+                    new Tag { Nom = "Éducatif" }
+                };
+            await context.Tags.AddRangeAsync(tags);
+            await context.SaveChangesAsync();
         }
 
         // Seed Platforms
         if (!context.Platforms.Any())
         {
-            var platforms = new List<Platform>
+            List<Platform> platforms = new List<Platform>
             {
                 new Platform { Nom = "PC", ImagePath = "/images/platforms/pc.png"  },
                 new Platform { Nom = "PS4", ImagePath = "/images/platforms/ps4.png"  },
@@ -61,14 +78,14 @@ public static class SeedData
                 new Platform { Nom = "Xbox Series X/S", ImagePath = "/images/platforms/xboxseries.png"  },
                 new Platform { Nom = "Switch", ImagePath = "/images/platforms/switch.png"  },
             };
-            context.Platforms.AddRange(platforms);
+            await context.Platforms.AddRangeAsync(platforms);
+            await context.SaveChangesAsync();
         }
-        await context.SaveChangesAsync();
 
         // Seed Games
         if (!context.Games.Any())
         {
-            var games = new List<Game>
+            List<Game> games = new List<Game>
             {
                 new Game
                 {
@@ -198,8 +215,8 @@ public static class SeedData
                     }
                 }
             };
-            context.Games.AddRange(games);
+            await context.Games.AddRangeAsync(games);
+            await context.SaveChangesAsync();
         }
-        await context.SaveChangesAsync();
     }
 }

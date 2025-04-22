@@ -40,5 +40,44 @@ namespace GameShelf.UnitTests.Services
 
             user.UserGames.Should().BeEmpty();
         }
+
+        [Fact]
+        public void PromoteToAdmin_ShouldSetRoleToAdmin()
+        {
+            var user = new User();
+            user.PromoteToAdmin();
+
+            user.Role.Should().Be(UserRole.Admin);
+        }
+
+        [Fact]
+        public void UpdateGameStatus_ShouldUpdateNoteAndStatut()
+        {
+            var user = new User { Id = Guid.NewGuid() };
+            var gameId = Guid.NewGuid();
+            user.AddGame(gameId, GameStatus.EnCours, 4);
+
+            user.UpdateGameStatus(gameId, GameStatus.Termine, 5);
+
+            var updated = user.UserGames.First();
+            updated.Statut.Should().Be(GameStatus.Termine);
+            updated.Note.Should().Be(5);
+        }
+
+        [Fact]
+        public void ProposeGame_ShouldAddNewProposal()
+        {
+            var user = new User { Id = Guid.NewGuid() };
+            var platformId = Guid.NewGuid();
+            string titre = "Zelda";
+
+            var proposal = user.ProposeGame(user.Id, platformId, titre, "image.jpg");
+
+            user.Propositions.Should().ContainSingle();
+            proposal.Titre.Should().Be("Zelda");
+            proposal.PlatformId.Should().Be(platformId);
+            proposal.Statut.Should().Be(ProposalStatus.EnAttente);
+        }
+
     }
 }

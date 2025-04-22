@@ -41,5 +41,39 @@ namespace GameShelf.UnitTests.Services
 
             game.GameTags.Should().BeEmpty();
         }
+
+        [Fact]
+        public void CreateNew_ShouldInitializeGameCorrectly()
+        {
+            // Arrange
+            var game = new Game();
+            var titre = "Hollow Knight";
+            var description = "Metroidvania";
+            var dateSortie = new DateTime(2017, 2, 24);
+            var editeur = "Team Cherry";
+            var imagePath = "hollowknight.jpg";
+
+            game.CreateNew(titre, description, dateSortie, editeur, imagePath);
+
+            game.Titre.Should().Be(titre);
+            game.Description.Should().Be(description);
+            game.DateSortie.Should().Be(dateSortie);
+            game.Editeur.Should().Be(editeur);
+            game.ImagePath.Should().Be(imagePath);
+        }
+
+        [Fact]
+        public void RemovePlatform_ShouldRemovePlatform()
+        {
+            Game game = new Game();
+            Guid platformId = Guid.NewGuid();
+            Platform platform = new Platform { Id = platformId, Nom = "Switch" };
+            game.AddPlatforms(new[] { platform });
+
+            game.RemovePlatform(platformId);
+
+            game.GamePlatforms.Should().BeEmpty();
+        }
+
     }
 }
