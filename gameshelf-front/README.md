@@ -1,54 +1,95 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# GameShelf - Frontend (React + Vite)
 
-Currently, two official plugins are available:
+## ✨ À propos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Ce dossier contient l’interface utilisateur de l’application **GameShelf**. Elle est construite avec :
 
-## Expanding the ESLint configuration
+- **React 19** + **Redux Toolkit**
+- **Vite** pour le bundling rapide
+- La librairie **MUI** pour le style
+- Un découpage clair entre les pages publiques, utilisateur et administration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## ⚙️ Installation
+
+```bash
+cd gameShelf-front
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+> ⚠️ Assurez-vous d’avoir Node.js (v18+ conseillé) et npm installés
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## 🌍 Configuration
+
+Créer un fichier `.env` à la racine avec :
+
 ```
+VITE_API_BASE_URL=http://localhost:5187
+```
+
+---
+
+## 🚀 Build & lancement
+
+### En développement :
+
+```bash
+npm run dev
+```
+
+### En production :
+
+```bash
+npm run build
+```
+
+Les fichiers statiques sont automatiquement placés dans `/wwwroot` bon un hebergement côté .NET.
+
+---
+
+## 🗂️ Structure du projet
+
+```
+gameShelf-front/
+├── 📂 src/
+│   ├── 📂 app/              ← Configuration Redux
+│   ├── 📂 components/       ← Composants réutilisables (modale, header, cards...)
+│   ├── 📂 hooks/            ← Hooks personalisés réutilisables
+│   ├── 📂 pages/            ← Pages (MyLibrary, Games, Admin, etc.)
+│   ├── 📂 router/           ← Définition des routes / URL pour accéder aux pages
+│   ├── 📂 store/            ← Slices + composants liés (ex: games, tags, user)
+│   ├── 📂 styles/           ← Fichiers css + globals
+│   ├── 📂 types/            ← Types TS represantant les DTOs transitant entre le front et le back
+│   └── 📂 utils/            ← Fonctions utilitaires, constantes
+├── 📂 public/
+└── .env
+```
+
+---
+
+## 🔐 Authentification
+
+- Login / signup via Azure B2C
+- Token JWT stocké dans les cookies
+- Décodage local pour affichage conditionnel des rôles
+- Routes protégées via `RequireAuth` wrapper
+
+---
+
+## 🧠 State management
+
+- Utilise `@reduxjs/toolkit`
+- Slices :
+  - `gameSlice`, `userSlice`, `tagSlice`, `platformSlice`, `userGameSlice`, `proposalSlice`, `admin*Slice`
+- Toaster global (`useToast()`) intégré
+
+---
+
+## 🧪 Tests
+
+> (Non inclus dans cette version, mais structure prête à accueillir Jest + Testing Library)
+
