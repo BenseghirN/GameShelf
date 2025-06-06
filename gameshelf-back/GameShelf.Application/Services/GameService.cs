@@ -44,13 +44,32 @@ namespace GameShelf.Application.Services
             await dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<List<GameDto>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<List<GameDto>> GetAllAsync(List<string>? genres, List<string>? platforms, CancellationToken cancellationToken = default)
         {
-            List<Game> games = await dbContext.Games
+            // List<Game> games = await dbContext.Games
+            //     .Include(g => g.GameTags).ThenInclude(gt => gt.Tag)
+            //     .Include(g => g.GamePlatforms).ThenInclude(gp => gp.Platform)
+            //     .ToListAsync(cancellationToken);
+
+            // return mapper.Map<List<GameDto>>(games);
+            var query = dbContext.Games
                 .Include(g => g.GameTags).ThenInclude(gt => gt.Tag)
                 .Include(g => g.GamePlatforms).ThenInclude(gp => gp.Platform)
-                .ToListAsync(cancellationToken);
+                .AsQueryable();
 
+            if (genres?.Any() == true)
+            {
+                query = query.Where(g =>
+                    g.GameTags.Any(gt => genres.Contains(gt.Tag.Nom)));
+            }
+
+            if (platforms?.Any() == true)
+            {
+                query = query.Where(g =>
+                    g.GamePlatforms.Any(gp => platforms.Contains(gp.Platform.Nom)));
+            }
+
+            var games = await query.ToListAsync(cancellationToken);
             return mapper.Map<List<GameDto>>(games);
         }
 

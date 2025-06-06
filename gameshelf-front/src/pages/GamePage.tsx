@@ -17,8 +17,9 @@ import GameDetailsModal from "@/components/modals/GameDetails/GameDetailsModal";
 import { AddToLibraryDto } from "@/types/AddToLibraryDto";
 import FancyButton from "@/components/controls/FancyButton";
 import SendIcon from "@mui/icons-material/Send";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/useToas";
+import GameFilters from "@/components/GameFilters";
 
 export default function GamesPage() {
   const dispatch = useAppDispatch();
@@ -28,15 +29,23 @@ export default function GamesPage() {
   const [selectedGame, setSelectedGame] = useState<Game | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const { toast, showToast, closeToast } = useToast();
+  const [searchParams] = useSearchParams();
 
-  useEffect(() => {
-    dispatch(loadAllGames());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(loadAllGames());
+  // }, [dispatch]);
 
   const filteredGames =
     games.filter((game) =>
       game.titre.toLowerCase().includes(search.toLowerCase())
     ) || [];
+
+  useEffect(() => {
+    const genres = searchParams.getAll("genres");
+    const platforms = searchParams.getAll("platforms");
+
+    dispatch(loadAllGames({ genres, platforms }));
+  }, [dispatch, searchParams]);
 
   const {
     userGame,
@@ -130,7 +139,7 @@ export default function GamesPage() {
       </Box>
 
       {/* Champ de recherche pour filtrer les jeux */}
-      <Box maxWidth="300px" mx="auto" mb={4}>
+      <Box maxWidth="900px" mx="auto" mb={4}>
         <TextField
           fullWidth
           label="Rechercher un jeu"
@@ -140,6 +149,7 @@ export default function GamesPage() {
           onChange={(e) => setSearch(e.target.value)}
           sx={{ mb: 3 }}
         />
+        <GameFilters />
       </Box>
 
       {loading && (

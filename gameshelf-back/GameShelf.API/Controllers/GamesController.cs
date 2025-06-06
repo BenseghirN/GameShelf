@@ -20,14 +20,16 @@ namespace GameShelf.API.Controllers
         /// <summary>
         /// Récupère tous les jeux disponibles.
         /// </summary>
+        /// <param name="genres"></param>
+        /// <param name="platforms"></param>
         /// <param name="cancellationToken">Token d'annulation.</param>
         /// <returns>Liste des jeux.</returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<GameDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll([FromQuery] List<string>? genres, [FromQuery] List<string>? platforms, CancellationToken cancellationToken)
         {
-            List<GameDto> games = await gameService.GetAllAsync(cancellationToken);
+            List<GameDto> games = await gameService.GetAllAsync(genres, platforms, cancellationToken);
             return Ok(games);
         }
 

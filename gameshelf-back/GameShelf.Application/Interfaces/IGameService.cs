@@ -4,7 +4,7 @@ namespace GameShelf.Application.Interfaces
 {
     public interface IGameService
     {
-        Task<List<GameDto>> GetAllAsync(CancellationToken cancellationToken = default);
+        Task<List<GameDto>> GetAllAsync(List<string>? genres, List<string>? platforms, CancellationToken cancellationToken);
         Task<GameDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
         Task<GameDto> CreateAsync(NewGameDto gameDto, CancellationToken cancellationToken = default);
         Task<GameDto> UpdateAsync(Guid id, NewGameDto gameDto, CancellationToken cancellationToken = default);

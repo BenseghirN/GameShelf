@@ -14,16 +14,32 @@ const initialState: GameState = {
   error: null,
 };
 
-export const loadAllGames = createAsyncThunk<Game[]>(
-  "games/loadAllGames",
-  async (_, { rejectWithValue }) => {
-    const response = await fetchData<Game[]>(
-      `${import.meta.env.VITE_API_BASE_URL}/api/v1/Games`
-    );
-    if (!response) return rejectWithValue("Erreur lors du chargement des jeux");
-    return response;
-  }
-);
+// export const loadAllGames = createAsyncThunk<Game[]>(
+//   "games/loadAllGames",
+//   async (_, { rejectWithValue }) => {
+//     const response = await fetchData<Game[]>(
+//       `${import.meta.env.VITE_API_BASE_URL}/api/v1/Games`
+//     );
+//     if (!response) return rejectWithValue("Erreur lors du chargement des jeux");
+//     return response;
+//   }
+// );
+export const loadAllGames = createAsyncThunk<
+  Game[],
+  { genres?: string[]; platforms?: string[] } | undefined
+>("games/loadAllGames", async (filters, { rejectWithValue }) => {
+  const params = new URLSearchParams();
+
+  filters?.genres?.forEach((g) => params.append("genres", g));
+  filters?.platforms?.forEach((p) => params.append("platforms", p));
+
+  const response = await fetchData<Game[]>(
+    `${import.meta.env.VITE_API_BASE_URL}/api/v1/Games?${params.toString()}`
+  );
+
+  if (!response) return rejectWithValue("Erreur lors du chargement des jeux");
+  return response;
+});
 
 const gameSlice = createSlice({
   name: "games",
