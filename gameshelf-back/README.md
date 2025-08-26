@@ -140,5 +140,3 @@ dotnet build gameshelf-back/GameShelf.API
 ```
 
 ---
-
-Tu veux aussi un badge pour chaque techno comme dans le README principal ? Sinon je te fais celui du front maintenant 😄
